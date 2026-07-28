@@ -685,6 +685,11 @@ namespace RotationSolver.Data
 				{
 					return value.GetLocalizedDescription();
 				}
+				// Translate other enum descriptions for Chinese clients
+				if (LocalizationHelper.IsChineseClient)
+				{
+					return LocalizationHelper.GetGeneralChinese(description);
+				}
 				return description;
 			}
 
@@ -704,6 +709,12 @@ namespace RotationSolver.Data
 			if (value is UiString)
 			{
 				return value.GetLocalizedDescription();
+			}
+
+			// Translate other enum descriptions for Chinese clients
+			if (LocalizationHelper.IsChineseClient)
+			{
+				return LocalizationHelper.GetGeneralChinese(descString);
 			}
 
 			return descString;

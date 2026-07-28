@@ -1933,9 +1933,13 @@ public partial class RotationConfigWindow : Window
 		// Adjust item spacing for better layout
 		using var style = ImRaii.PushStyle(ImGuiStyleVar.ItemSpacing, new Vector2(0f, 5f));
 		ImGui.NewLine();
-		ImGui.TextWrapped("These commands can be used to open or change plugin settings directly from chat or macros.");
+		ImGui.TextWrapped(LocalizationHelper.IsChineseClient
+			? "这些命令可用于在聊天或宏中直接打开或修改插件设置。"
+			: "These commands can be used to open or change plugin settings directly from chat or macros.");
 		ImGui.NewLine();
-		ImGui.TextWrapped("Simply right clicking any action, setting, or toggle will pop up the macro associated with it.");
+		ImGui.TextWrapped(LocalizationHelper.IsChineseClient
+			? "右键点击任意技能、设置或开关即可弹出关联的宏命令。"
+			: "Simply right clicking any action, setting, or toggle will pop up the macro associated with it.");
 	}
 
 	// Helper method to display command help

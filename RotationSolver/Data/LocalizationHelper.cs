@@ -338,5 +338,99 @@ namespace RotationSolver.Data
                 _ => tabDescription
             };
         }
+
+        /// <summary>
+        /// General-purpose English-to-Chinese translation for enum descriptions that
+        /// are not <see cref="UiString"/> values (e.g. <see cref="SpecialCommandType"/>,
+        /// <see cref="StateCommandType"/>, and other enum display strings).
+        /// </summary>
+        private static readonly Dictionary<string, string> _generalTranslations = new()
+        {
+            // SpecialCommandType descriptions
+            { "To end this special duration before the set time.", "在设定时间前结束此特殊模式" },
+            { "Open a window to use AoE heal.", "打开使用范围治疗的窗口" },
+            { "Open a window to use single heal.", "打开使用单体治疗的窗口" },
+            { "Open a window to use AoE defense.", "打开使用范围防御的窗口" },
+            { "Open a window to use single defense.", "打开使用单体防御的窗口" },
+            { "Open a window to use Esuna, tank stance actions or True North.", "打开使用康复、坦克姿态或真北的窗口" },
+            { "Open a window to use Raise or Shirk.", "打开使用复活或退避的窗口" },
+            { "Open a window to move forward.", "打开前进的窗口" },
+            { "Open a window to move back.", "打开后退的窗口" },
+            { "Open a window to use knockback immunity actions.", "打开使用防击退技能的窗口" },
+            { "Open a window to burst.", "打开爆发的窗口" },
+            { "Open a window to speed up.", "打开加速的窗口" },
+            { "Open a window to use limit break.", "打开使用极限技的窗口" },
+            { "Open a window to do not use the casting action.", "打开禁止施法的窗口" },
+            { "Indicator for when RSR is intercepting action.", "RSR 正在拦截技能" },
+
+            // StateCommandType descriptions
+            { "Stop the addon. Always remember to turn it off when it is not in use!", "停止插件。不使用时请记得关闭！" },
+            { "Start the addon in Auto mode. When out of combat or when combat starts, switches the target according to the set condition. \r\n Optionally: You can add the target type to the end of the command you want RSR to do. For example: /rotation Auto Big",
+              "以自动模式启动插件。脱战或战斗开始时根据设置条件切换目标。\r\n 可选：在命令末尾添加目标类型。例如 /rotation Auto Big" },
+            { "Start in Target-Only mode. RSR will auto-select targets per normal logic but will not perform any actions.",
+              "以仅目标模式启动。RSR 将按常规逻辑自动选择目标但不执行任何技能" },
+            { "Start the addon in Manual mode. You need to choose the target manually. This will bypass any engage settings that you have set up and will start attacking immediately once something is targeted.",
+              "以手动模式启动插件。需要手动选择目标。将绕过所有交战设置，选中目标后立即开始攻击" },
+            { "This mode is managed by the Autoduty plugin", "此模式由 Autoduty 插件管理" },
+            { "This mode is managed by the Henchman plugin, or any other plugin that requires RSR just do rotation and not targetting.",
+              "此模式由 Henchman 插件或其他只需 RSR 执行循环而不需要目标选择的插件管理" },
+            { "Optional mode for PvP specific activities.", "PvP 专属活动的可选模式" },
+
+            // OtherCommandType descriptions
+            { "Open the settings.", "打开设置" },
+            { "Open the rotations.", "打开职业循环" },
+            { "Open the duty rotations.", "打开副本循环" },
+            { "Perform the actions.", "执行技能" },
+            { "Toggle the actions.", "切换技能" },
+            { "Do the next action.", "执行下一动作" },
+            { "Cycles between states following settings in Target > Configuration.", "根据目标 > 配置中的设置在状态间循环" },
+
+            // CombatType enum description (used in Job tab)
+            { "PvE", "PvE" },
+            { "PvP", "PvP" },
+            { "Both", "两者" },
+            { "None", "无" },
+
+            // Misc UI strings that bypass the UiString path
+            { "State Macros", "状态宏" },
+            { "Action and Setting Macros", "技能与设置宏" },
+            { "These commands can be used to open or change plugin settings directly from chat or macros.",
+              "这些命令可用于在聊天或宏中直接打开或修改插件设置" },
+            { "Simply right clicking any action, setting, or toggle will pop up the macro associated with it.",
+              "右键点击任意技能、设置或开关即可弹出关联的宏命令" },
+            { "Special Command Duration", "特殊命令持续时间" },
+            { "RotationSolver Settings", "RotationSolver 设置" },
+            { "Click to switch rotation", "点击切换职业循环" },
+            { "Description", "说明" },
+            { "Status", "状态" },
+            { "Configuration", "配置" },
+            { "Job Description", "职业说明" },
+
+            // ConfigUnitType descriptions
+            { "Time Unit, in seconds.", "时间单位（秒）" },
+            { "Angle Unit, in degrees.", "角度单位（度）" },
+            { "Distance Unit, in yalms.", "距离单位（米）" },
+            { "Ratio Unit, as percentage.", "比例单位（百分比）" },
+            { "Display Unit, in pixels.", "显示单位（像素）" },
+
+            // CompatibleType (no Description attrs, .ToString() used with .Replace('_', ' '))
+            { "Skill Usage", "技能使用" },
+            { "Skill Selection", "技能选择" },
+            { "Crash", "崩溃" },
+            { "Broken", "损坏" },
+        };
+
+        /// <summary>
+        /// Translates an arbitrary English string to Chinese using the general-purpose dictionary.
+        /// Returns the original string if no translation is found.
+        /// </summary>
+        public static string GetGeneralChinese(string english)
+        {
+            if (_generalTranslations.TryGetValue(english, out var chinese))
+            {
+                return chinese;
+            }
+            return english;
+        }
     }
 }
