@@ -2,6 +2,7 @@ using Dalamud.Interface.Utility.Raii;
 using Dalamud.Interface.Windowing;
 using ECommons.GameHelpers;
 using RotationSolver.ActionTimeline;
+using RotationSolver.Data;
 
 namespace RotationSolver.UI;
 
@@ -67,7 +68,7 @@ internal class ActionTimelineWindow : Window
 	{
 		if (!Player.Available)
 		{
-			ImGui.Text("Player not available");
+			ImGui.Text(LocalizationHelper.IsChineseClient ? "\u73a9\u5bb6\u4e0d\u53ef\u7528" : "Player not available");
 			return;
 		}
 

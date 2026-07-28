@@ -4,6 +4,7 @@ using Dalamud.Interface.Windowing;
 using ECommons.DalamudServices;
 using ECommons.Logging;
 using RotationSolver.Basic.Configuration;
+using RotationSolver.Data;
 
 namespace RotationSolver.UI;
 
@@ -22,7 +23,9 @@ internal class EasterEggWindow : Window
 	private bool _aiBlunderThisGame = false; // 1/1000 chance per match to intentionally blunder once
 	private bool _aiBlunderUsed = false;
 
-	public EasterEggWindow() : base("RSR Lab — Tic‑tac‑toe", BaseFlags)
+	private bool CN => LocalizationHelper.IsChineseClient;
+
+	public EasterEggWindow() : base("RSR Lab \u2014 Tic\u2011tac\u2011toe", BaseFlags)
 	{
 		Size = new Vector2(300, 360);
 		SizeCondition = ImGuiCond.FirstUseEver;
@@ -67,7 +70,7 @@ internal class EasterEggWindow : Window
 					if (CheckWin(_board, Cell.X))
 					{
 						_gameOver = true;
-						_status = "You win!";
+						_status = CN ? "\u4f60\u8d62\u4e86\uff01" : "You win!";
 						try
 						{
 							OtherConfiguration.RotationSolverRecord.TicTacToeWinStar = true;
@@ -78,7 +81,7 @@ internal class EasterEggWindow : Window
 					else if (IsDraw(_board))
 					{
 						_gameOver = true;
-						_status = "Draw.";
+						_status = CN ? "\u5e73\u5c40\u3002" : "Draw.";
 					}
 					else
 					{
@@ -97,7 +100,7 @@ internal class EasterEggWindow : Window
 
 		ImGui.Spacing();
 		ImGui.Separator();
-		ImGui.Text("I made this because i was bored");
+		ImGui.Text(CN ? "\u6211\u5199\u8fd9\u4e2a\u662f\u56e0\u4e3a\u592a\u65e0\u804a\u4e86" : "I made this because i was bored");
 		ImGui.Spacing();
 
 		using (var __ = ImRaii.PushColor(ImGuiCol.Text, ImGuiColors.DalamudYellow))
@@ -106,12 +109,12 @@ internal class EasterEggWindow : Window
 		}
 		ImGui.Spacing();
 
-		if (ImGui.Button("Reset"))
+		if (ImGui.Button(CN ? "\u91cd\u7f6e" : "Reset"))
 		{
 			Reset();
 		}
 		ImGui.SameLine();
-		if (ImGui.Button("Close"))
+		if (ImGui.Button(CN ? "\u5173\u95ed" : "Close"))
 		{
 			IsOpen = false;
 		}
@@ -132,7 +135,7 @@ internal class EasterEggWindow : Window
 		Array.Fill(_board, Cell.Empty);
 		_playerTurn = true;
 		_gameOver = false;
-		_status = "You are X. Click to play.";
+		_status = CN ? "\u4f60\u662f X\u3002\u70b9\u51fb\u5f00\u59cb\u6e38\u620f\u3002" : "You are X. Click to play.";
 		// 1/1000 chance at the start of each match for the AI to intentionally make one bad move
 		_aiBlunderThisGame = _rng.Next(0, 1000) == 0;
 		_aiBlunderUsed = false;
@@ -173,17 +176,17 @@ internal class EasterEggWindow : Window
 			if (CheckWin(_board, Cell.O))
 			{
 				_gameOver = true;
-				_status = "RSR wins!";
+				_status = CN ? "RSR \u80dc\u5229\uff01" : "RSR wins!";
 			}
 			else if (IsDraw(_board))
 			{
 				_gameOver = true;
-				_status = "Draw.";
+				_status = CN ? "\u5e73\u5c40\u3002" : "Draw.";
 			}
 			else
 			{
 				_playerTurn = true;
-				_status = "Your turn.";
+				_status = CN ? "\u8f6e\u5230\u4f60\u4e86\u3002" : "Your turn.";
 			}
 		}
 		catch (Exception ex)

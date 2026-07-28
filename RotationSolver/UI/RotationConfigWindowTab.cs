@@ -78,6 +78,7 @@ internal static class RotationConfigWindowTabExtensions
 			RotationConfigWindowTab.Rotation => "循环",
 			RotationConfigWindowTab.Main => "主窗口",
 			RotationConfigWindowTab.Job => "职业",
+			RotationConfigWindowTab.DutyRotation => "副本循环",
 			RotationConfigWindowTab.Duty => "任务",
 			RotationConfigWindowTab.Actions => "技能",
 			RotationConfigWindowTab.List => "列表",
@@ -87,6 +88,7 @@ internal static class RotationConfigWindowTabExtensions
 			RotationConfigWindowTab.Target => "目标",
 			RotationConfigWindowTab.Extra => "额外",
 			RotationConfigWindowTab.Debug => "调试",
+			RotationConfigWindowTab.AutoDuty => "自动副本",
 			_ => rotationConfigWindowTab.ToString()
 		};
 	}

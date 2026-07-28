@@ -81,11 +81,11 @@ internal class ControlWindow : CtrlWindow
 		ImGui.Spacing();
 		columnWidth = Math.Max(columnWidth, ImGui.GetCursorPosX());
 
-		var autoMode = DataCenter.TargetingType;
-		ImGui.Text(" Targeting: " + autoMode.ToString());
+	var autoMode = DataCenter.TargetingType;
+	ImGui.Text(LocalizationHelper.IsChineseClient ? " 目标: " + autoMode.ToString() : " Targeting: " + autoMode.ToString());
 
-		var aoeType = Service.Config.AoEType;
-		if (ImGuiHelper.SelectableButton("AoE: " + aoeType.ToString()))
+	var aoeType = Service.Config.AoEType;
+	if (ImGuiHelper.SelectableButton((LocalizationHelper.IsChineseClient ? "AoE: " : "AoE: ") + aoeType.ToString()))
 		{
 			aoeType = (ConfigTypes.AoEType)(((int)aoeType + 1) % 3);
 			Service.Config.AoEType = aoeType;
@@ -203,7 +203,7 @@ internal class ControlWindow : CtrlWindow
 
 		ImGui.Spacing();
 
-		ImGui.Text("CMD:");
+		ImGui.Text(LocalizationHelper.IsChineseClient ? "\u547d\u4ee4\uff1a" : "CMD:");
 		ImGui.SameLine();
 
 		_ = DrawIAction(DataCenter.CommandNextAction, Service.Config.ControlWindow0GCDSize, 1);
@@ -212,7 +212,7 @@ internal class ControlWindow : CtrlWindow
 
 		using var group = ImRaii.Group();
 		ImGui.Text(DataCenter.CurrentTargetToHostileType.GetDescription());
-		ImGui.Text("Auto: " + DataCenter.AutoStatus.ToString());
+		ImGui.Text(LocalizationHelper.IsChineseClient ? "\u81ea\u52a8\uff1a" + DataCenter.AutoStatus.ToString() : "Auto: " + DataCenter.AutoStatus.ToString());
 	}
 
 	private static void DrawCommandAction(IAction? gcd, IAction? ability, SpecialCommandType command, Vector4 color)
@@ -525,7 +525,7 @@ internal class ControlWindow : CtrlWindow
 	{
 		using var group = ImRaii.Group();
 
-		var str = "Next Action";
+		var str = LocalizationHelper.IsChineseClient ? "\u4e0b\u4e00\u52a8\u4f5c" : "Next Action";
 		ImGui.SetCursorPosX(ImGui.GetCursorPosX() + (width / 2) - (ImGui.CalcTextSize(str).X / 2));
 		ImGui.TextColored(ImGuiColors.DalamudYellow, str);
 

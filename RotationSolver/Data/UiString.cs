@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using RotationSolver.UI;
+using System.ComponentModel;
 
 namespace RotationSolver.Data
 {
@@ -679,6 +680,11 @@ namespace RotationSolver.Data
 		{
 			if (_enumDescriptions.TryGetValue(value, out var description))
 			{
+				// Re-check UiString values in case language has changed since first cache
+				if (value is UiString)
+				{
+					return value.GetLocalizedDescription();
+				}
 				return description;
 			}
 
@@ -693,7 +699,62 @@ namespace RotationSolver.Data
 
 			var descString = attribute == null ? value.ToString() : attribute.Description;
 			_enumDescriptions.Add(value, descString);
+
+			// For UiString values, return the localized version
+			if (value is UiString)
+			{
+				return value.GetLocalizedDescription();
+			}
+
 			return descString;
+		}
+
+		/// <summary>
+		/// Gets the localized description, checking whether the game client is running in Chinese.
+		/// </summary>
+		public static string GetLocalizedDescription(this Enum value)
+		{
+			if (value is UiString uiString)
+			{
+				if (LocalizationHelper.IsChineseClient)
+				{
+					return uiString.GetChineseString();
+				}
+
+				if (_enumDescriptions.TryGetValue(value, out var cachedDesc))
+				{
+					return cachedDesc;
+				}
+
+				return value.ToString();
+			}
+
+			// Handle RotationConfigWindowTab descriptions for Chinese client
+			if (value is RotationConfigWindowTab && LocalizationHelper.IsChineseClient)
+			{
+				if (_enumDescriptions.TryGetValue(value, out var desc))
+				{
+					return LocalizationHelper.GetTabDescriptionCN(desc);
+				}
+
+				var field = value.GetType().GetField(value.ToString());
+				if (field != null)
+				{
+					var attribute = field.GetCustomAttribute<DescriptionAttribute>();
+					var descString = attribute == null ? value.ToString() : attribute.Description;
+					_enumDescriptions.Add(value, descString);
+					return LocalizationHelper.GetTabDescriptionCN(descString);
+				}
+
+				return value.ToString();
+			}
+
+			if (_enumDescriptions.TryGetValue(value, out var standardDesc))
+			{
+				return standardDesc;
+			}
+
+			return value.ToString();
 		}
 	}
 }

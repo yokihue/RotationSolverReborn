@@ -147,6 +147,55 @@ public partial class RotationConfigWindow : Window
 	private string? _cachedTipText = null;
 	private int _cachedTipIndex = -1;
 
+	// Chinese translations for usage hints
+	private static readonly string[] _chineseUsageHints =
+	[
+		"\u53f3\u952e\u70b9\u51fb\u4efb\u610f\u6280\u80fd\u3001\u8bbe\u7f6e\u6216\u5f00\u5173\uff0c\u53ef\u67e5\u770b/\u590d\u5236\u5176\u5b8f\u804a\u5929\u547d\u4ee4\u3002",
+		"\u53ef\u4f7f\u7528 /rsr \u4f5c\u4e3a /rotation \u7684\u7b80\u5199\u522b\u540d\u3002",
+		"\u4f7f\u7528 /rotation Auto\u3001/rotation Manual \u6216 /rotation Off \u5feb\u901f\u5207\u6362\u6a21\u5f0f\u3002",
+		"\u4f7f\u7528\u5de6\u4e0a\u89d2\u7684\u641c\u7d22\u6846\u76f4\u63a5\u8df3\u8f6c\u5230\u5bf9\u5e94\u8bbe\u7f6e\u3002",
+		"\u70b9\u51fb\u641c\u7d22\u7ed3\u679c\u4e2d\u7684\u5916\u90e8\u94fe\u63a5\u56fe\u6807\u53ef\u8df3\u8f6c\u5230\u5bf9\u5e94\u83dc\u5355\u3002",
+		"\u53f3\u952e\u70b9\u51fb\u8bbe\u7f6e\u6807\u7b7e\u53ef\u590d\u5236\u5373\u7528\u578b /rotation Settings \u547d\u4ee4\u3002",
+		"\u6280\u80fd\u6807\u7b7e\u9875\uff1a\u70b9\u51fb\u6280\u80fd\u56fe\u6807\u8fdb\u884c\u914d\u7f6e\u3001\u542f\u7528/\u7981\u7528\u6216\u8bbe\u7f6e\u5feb\u6377\u952e\u3002",
+		"\u6280\u80fd\uff1a\u5207\u6362\u300c\u5728\u51b7\u5374\u7a97\u53e3\u4e2d\u663e\u793a\u300d\u53ef\u5728\u51b7\u5374\u8986\u76d6\u5c42\u4e2d\u5305\u542b\u8be5\u6280\u80fd\u3002",
+		"\u6280\u80fd\uff1a\u542f\u7528\u300c\u62e6\u622a\u300d\u8ba9 RSR \u81ea\u52a8\u91ca\u653e\u4f60\u624b\u52a8\u6392\u961f\u7684\u6280\u80fd\uff08\u4ec5 PvE\uff09\u3002",
+		"\u754c\u9762 > \u4fe1\u606f\u663e\u793a\uff1a\u542f\u7528 DTR \u72b6\u6001\u3001\u63d0\u793a\u5f39\u51fa\u3001\u539f\u59cb\u51b7\u5374\u548c\u8fd9\u4e9b\u63d0\u793a\u3002",
+		"\u754c\u9762 > \u7a97\u53e3\uff1a\u542f\u7528\u4e0b\u4e00\u52a8\u4f5c\u3001\u63a7\u5236\u3001\u51b7\u5374\u548c\u65f6\u95f4\u7ebf\u7a97\u53e3\u3002",
+		"\u4e0b\u4e00\u52a8\u4f5c\uff1a\u300c\u65e0\u8f93\u5165\u300d\u548c\u300c\u4e0d\u79fb\u52a8\u300d\u9009\u9879\u53ef\u6539\u53d8\u8986\u76d6\u5c42\u884c\u4e3a\u3002",
+		"\u4ec5\u5728\u6709\u526f\u672c\u6216\u654c\u4eba\u65f6\u663e\u793a\u7a97\u53e3\uff1a\u754c\u9762 > \u7a97\u53e3 > \u4ec5\u5728\u6709\u654c\u4eba\u6216\u526f\u672c\u65f6\u663e\u793a\u3002",
+		"\u5217\u8868\u6807\u7b7e\u9875\uff1a\u7ba1\u7406\u9a71\u6563\u3001\u4f18\u5148\u72b6\u6001\u3001\u51fb\u9000\u3001\u65e0\u654c\u548c\u7981\u6b62\u65bd\u6cd5\u5217\u8868\u3002",
+		"\u5217\u8868\u6807\u7b7e\u9875\uff1a\u4f7f\u7528\u300c\u91cd\u7f6e\u5e76\u66f4\u65b0\u300d\u5feb\u901f\u6062\u590d\u7cbe\u9009\u5217\u8868\u3002",
+		"\u72b6\u6001\u5217\u8868\uff1a\u6309\u300c+\u300d\u901a\u8fc7\u540d\u79f0\u6216 ID \u641c\u7d22\uff1b\u652f\u6301\u6a21\u7cca\u641c\u7d22\u3002",
+		"\u72b6\u6001\u5217\u8868\uff1a\u53f3\u952e\u70b9\u51fb\u56fe\u6807\u53ef\u79fb\u9664\uff1b\u5f39\u51fa\u7a97\u53e3\u4e2d Delete \u952e\u540c\u6837\u6709\u6548\u3002",
+		"\u76ee\u6807\u6807\u7b7e\u9875\uff1a\u8c03\u6574\u76ee\u6807\u9009\u62e9\u3001\u89c6\u91ce\u9525\u5f62\u3001\u8fdb\u6218\u884c\u4e3a\u4ee5\u53ca\u6728\u6869/Boss \u5904\u7406\u3002",
+		"\u76ee\u6807\u6807\u7b7e\u9875\uff1a\u8bbe\u7f6e /rotation Cycle \u884c\u4e3a\u548c\u76ee\u6807\u5207\u6362\u5ef6\u8fdf\u3002",
+		"\u901a\u8fc7\u804a\u5929\u7ba1\u7406\u76ee\u6807\u7c7b\u578b\uff1a/rotation Settings TargetingTypes add|remove <\u7c7b\u578b>\u3002",
+		"\u81ea\u52a8 > \u6280\u80fd\u4f7f\u7528\uff1a\u5141\u8bb8/\u7981\u6b62\u80fd\u529b\u6280\uff0c\u8bbe\u7f6e AoE \u98ce\u683c\u3001\u836f\u6c34\u3001\u6253\u65ad\u548c\u771f\u5317\u3002",
+		"\u81ea\u52a8 > \u6cbb\u7597\uff1a\u8c03\u6574\u6cbb\u7597\u9608\u503c\u548c\u975e\u6cbb\u7597\u804c\u4e1a\u7684\u6cbb\u7597\u884c\u4e3a\u3002",
+		"\u6cbb\u7597\u804c\u4e1a\uff1a\u5728 \u81ea\u52a8 > \u6cbb\u7597 \u4e2d\u81ea\u5b9a\u4e49\u590d\u6d3b/\u5373\u523b\u548f\u5531\u548c\u4f18\u5148\u7ea7\u3002",
+		"\u5730\u9762 AoE\uff1a\u81ea\u52a8 > \u6cbb\u7597 \u4e2d\u6709\u667a\u80fd\u653e\u7f6e\u589e\u76ca\u8303\u56f4\u6280\u80fd\u7684\u9009\u9879\u3002",
+		"\u57fa\u7840 > \u8ba1\u65f6\u5668\uff1a\u8c03\u6574\u300c\u63d0\u524d\u91cf\u300d\u548c\u300c\u6700\u77ed\u66f4\u65b0\u65f6\u95f4\u300d\u6765\u5e73\u8861\u6027\u80fd\u548c\u63d2\u5165\u80fd\u529b\u3002",
+		"\u57fa\u7840 > \u81ea\u52a8\u5207\u6362\uff1a\u5012\u8ba1\u65f6\u3001\u6b7b\u4ea1\u3001\u533a\u57df\u5207\u6362\u7b49\u573a\u666f\u7684\u81ea\u52a8\u5f00\u5173\u3002",
+		"\u6559\u5b66\u6a21\u5f0f\u4f1a\u9ad8\u4eae\u76ee\u6807\uff1b\u989c\u8272\u8bbe\u7f6e\u4f4d\u4e8e \u754c\u9762 > \u4fe1\u606f\u663e\u793a\u3002",
+		"\u804c\u4e1a\u6807\u7b7e\u9875\uff1a\u7f16\u8f91\u821e\u8005\u821e\u4f34\u3001\u8d24\u8005\u53d1\u708e\u5766\u514b\u548c\u5360\u661f\u5361\u724c\u7684\u4f18\u5148\u7ea7\uff08\u4ec5\u5728\u5bf9\u5e94\u804c\u4e1a\u65f6\u53ef\u7528\uff09\u3002",
+		"\u5173\u4e8e > \u5b8f\uff1a\u5217\u51fa\u53ef\u7528\u7684\u804a\u5929/\u5b8f\u547d\u4ee4\u53ca\u5b9e\u7528\u8bed\u6cd5\u3002",
+		"\u5173\u4e8e > \u94fe\u63a5\uff1a\u6253\u5f00\u914d\u7f6e\u6587\u4ef6\u5939\u3001GitHub\u3001Ko-fi \u548c Discord\u3002",
+		"\u989d\u5916 > \u5185\u90e8\uff1a\u5b89\u5168\u5907\u4efd/\u6062\u590d\u914d\u7f6e\u3002",
+		"\u989d\u5916\uff1a\u53ef\u9009\u5fae\u8c03\uff0c\u5982\u79fb\u9664\u52a8\u753b/\u51b7\u5374\u5ef6\u8fdf\u3002",
+		"\u70b9\u51fb\u4fa7\u8fb9\u680f\u5de6\u4e0b\u89d2\u7684\u7acb\u65b9\u4f53\u56fe\u6807\u5c06\u8bca\u65ad\u4fe1\u606f\u590d\u5236\u5230\u526a\u8d34\u677f\u3002",
+		"\u65f6\u95f4\u7ebf\u7a97\u53e3\u53ef\u4ee5\u53ef\u89c6\u5316\u663e\u793a\u8fd1\u671f\u52a8\u4f5c\uff08\u754c\u9762 > \u7a97\u53e3\uff09\u3002",
+		"\u8f93\u51fa\u4f24\u5bb3\uff0c\u4e0d\u8981\u5012\u4e0b",
+		"\u6cbb\u7597\uff1a\u552f\u4e00\u91cd\u8981\u7684 HP \u662f\u6700\u540e\u90a3 1 \u70b9",
+		"\u4fdd\u6301\u53cb\u5584",
+		"\u9700\u8981\u65f6\u53ef\u4f7f\u7528\u300c/statusoff <\u540d\u79f0>\u300d\u79fb\u9664\u67d0\u4e9b\u81ea\u8eab\u589e\u76ca\uff08\u5982\u901f\u884c\uff09\u3002",
+		"RSR \u5728\u4f7f\u7528 Legacy \u79fb\u52a8\u6a21\u5f0f\u65f6\u6548\u679c\u6700\u4f73\u3002"
+	];
+
+	/// <summary>
+	/// Gets the current hint array based on client language.
+	/// </summary>
+	private string[] CurrentHints => CNLanguageClient ? _chineseUsageHints : _baseUsageHints;
+
 	public RotationConfigWindow()
 	: base("###rsrConfigWindow", ImGuiWindowFlags.NoScrollbar, false)
 	{
@@ -165,7 +214,7 @@ public partial class RotationConfigWindow : Window
 			ShowTooltip = () =>
 			{
 				ImGui.BeginTooltip();
-				ImGui.Text("Click to reset plugin configs");
+				ImGui.Text(CNLanguageClient ? "\u70b9\u51fb\u91cd\u7f6e\u63d2\u4ef6\u914d\u7f6e" : "Click to reset plugin configs");
 				ImGui.EndTooltip();
 			},
 			Priority = 3,
@@ -182,7 +231,7 @@ public partial class RotationConfigWindow : Window
 			ShowTooltip = () =>
 			{
 				ImGui.BeginTooltip();
-				ImGui.Text("Support the developer on Ko-fi");
+				ImGui.Text(CNLanguageClient ? "\u5728 Ko-fi \u4e0a\u652f\u6301\u5f00\u53d1\u8005" : "Support the developer on Ko-fi");
 				ImGui.EndTooltip();
 			},
 			Priority = 2,
@@ -546,13 +595,13 @@ public partial class RotationConfigWindow : Window
 			{
 				ImGuiEx.Icon(FontAwesomeIcon.Star);
 			}
-			ImguiTooltips.HoveredTooltip("Tic-tac-toe winner!");
+			ImguiTooltips.HoveredTooltip(CNLanguageClient ? "\u4e95\u5b57\u68cb\u80dc\u5229\u8005\uff01" : "Tic-tac-toe winner!");
 		}
 
 		if (clicked)
 		{
 			ImGui.SetClipboardText(diagInfo.ToString());
-			Svc.Toasts.ShowQuest($"Diagnostic info copied to clipboard");
+			Svc.Toasts.ShowQuest(CNLanguageClient ? "\u8bca\u65ad\u4fe1\u606f\u5df2\u590d\u5236\u5230\u526a\u8d34\u677f" : $"Diagnostic info copied to clipboard");
 		}
 	}
 
@@ -972,22 +1021,24 @@ public partial class RotationConfigWindow : Window
 
 	// Decide whether to show a normal tip or a dynamic special-thanks tip.
 	// Example: 1 out of 5 times show the special thanks.
-	private static string GetDynamicHintText(int index)
+	private string GetDynamicHintText(int index)
 	{
+		var isCN = CNLanguageClient;
+
 		// Show a special thanks message 1 out of every 5 times, otherwise show a normal hint.
 		if (_supporters != null && _supporters.Length > 0 && index % 5 == 0)
 		{
 			// Pick a random supporter for the special thanks message.
 			var supporterIndex = _hintRng.Next(_supporters.Length);
 			var supporter = _supporters[supporterIndex];
-			return $"Special thanks to supporter: {supporter}!";
+			return isCN ? $"特别感谢支持者：{supporter}！" : $"Special thanks to supporter: {supporter}!";
 		}
 		// Defensive: fallback to base hints if index is valid, else a default message.
-		if (_baseUsageHints != null && _baseUsageHints.Length > 0 && index >= 0 && index < _baseUsageHints.Length)
+		if (_baseUsageHints != null && _baseUsageHints.Length > 0 && index >= 0 && index < CurrentHints.Length)
 		{
-			return _baseUsageHints[index];
+			return CurrentHints[index];
 		}
-		return "Thank you for using Rotation Solver Reborn!";
+		return isCN ? "感谢使用 Rotation Solver Reborn！" : "Thank you for using Rotation Solver Reborn!";
 	}
 
 	// Hint bar at the top of the body
@@ -1004,7 +1055,9 @@ public partial class RotationConfigWindow : Window
 			{
 				ImGui.PushTextWrapPos(ImGui.GetCursorPos().X + availableWidth);
 				ImGui.PushStyleColor(ImGuiCol.Text, ImGuiColors.DalamudOrange);
-				ImGui.TextWrapped($"Notice: You are running the staging branch of Dalamud. For best compatibility, use the XIVLauncher and switch back to 'release' branch if available for your current version of FFXIV.");
+				ImGui.TextWrapped(CNLanguageClient
+					? $"注意：您正在运行 Dalamud 的 staging 分支。为获得最佳兼容性，请使用 XIVLauncher 并切换回'发布'分支（如果当前 FFXIV 版本可用）。"
+					: $"Notice: You are running the staging branch of Dalamud. For best compatibility, use the XIVLauncher and switch back to 'release' branch if available for your current version of FFXIV.");
 				ImGui.PopStyleColor();
 				ImGui.PopTextWrapPos();
 				ImGui.Spacing();
@@ -1014,7 +1067,7 @@ public partial class RotationConfigWindow : Window
 					Player.Job == Job.LTW || Player.Job == Job.WVR || Player.Job == Job.ALC || Player.Job == Job.CUL ||
 					Player.Job == Job.MIN || Player.Job == Job.FSH || Player.Job == Job.BTN))
 			{
-				errorText = $"You are on an unsupported class: {Player.Job}";
+				errorText = CNLanguageClient ? $"\u5f53\u524d\u4f7f\u7528\u7684\u662f\u4e0d\u53d7\u652f\u6301\u7684\u804c\u4e1a\uff1a{Player.Job}" : $"You are on an unsupported class: {Player.Job}";
 			}
 
 			if (DataCenter.SystemWarnings != null && DataCenter.SystemWarnings.Count != 0)
@@ -1093,7 +1146,7 @@ public partial class RotationConfigWindow : Window
 			{
 				_lastHintSwitch = now;
 				_hintIndex++;
-				if (_hintIndex >= _baseUsageHints.Length)
+				if (_hintIndex >= CurrentHints.Length)
 				{
 					_hintIndex = 0;
 				}
@@ -1111,7 +1164,7 @@ public partial class RotationConfigWindow : Window
 		// Generate tip only when index changes; this avoids random flicker per frame.
 		if (_cachedTipIndex != _hintIndex || string.IsNullOrEmpty(_cachedTipText))
 		{
-			_cachedTipText = $"Tip: {GetDynamicHintText(_hintIndex)}";
+			_cachedTipText = CNLanguageClient ? $"\u63d0\u793a\uff1a{GetDynamicHintText(_hintIndex)}" : $"Tip: {GetDynamicHintText(_hintIndex)}";
 			_cachedTipIndex = _hintIndex;
 		}
 
