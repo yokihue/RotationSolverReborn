@@ -81,7 +81,7 @@ internal abstract class RotationConfigBase : IRotationConfig
 		var attr = property.GetCustomAttribute<RotationConfigAttribute>();
 		if (attr != null)
 		{
-			DisplayName = attr.Name;
+			DisplayName = RotationConfigCN.TryGetChinese(attr.Name);
 			Type = attr.Type;
 			Parent = attr.Parent;
 
@@ -129,7 +129,7 @@ internal abstract class RotationConfigBase : IRotationConfig
 		var attr = property.GetCustomAttribute<RotationConfigAttribute>();
 		if (attr != null)
 		{
-			DisplayName = attr.Name;
+			DisplayName = RotationConfigCN.TryGetChinese(attr.Name);
 			Type = attr.Type;
 			PhantomJob = attr.PhantomJob;
 			Parent = attr.Parent;

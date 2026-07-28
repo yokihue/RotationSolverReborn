@@ -1033,10 +1033,11 @@ public partial class RotationConfigWindow : Window
 			var supporter = _supporters[supporterIndex];
 			return isCN ? $"特别感谢支持者：{supporter}！" : $"Special thanks to supporter: {supporter}!";
 		}
-		// Defensive: fallback to base hints if index is valid, else a default message.
-		if (_baseUsageHints != null && _baseUsageHints.Length > 0 && index >= 0 && index < CurrentHints.Length)
+		// Defensive: fallback to current language hints if index is valid, else a default message.
+		var hints = CurrentHints;
+		if (hints != null && hints.Length > 0 && index >= 0 && index < hints.Length)
 		{
-			return CurrentHints[index];
+			return hints[index];
 		}
 		return isCN ? "感谢使用 Rotation Solver Reborn！" : "Thank you for using Rotation Solver Reborn!";
 	}

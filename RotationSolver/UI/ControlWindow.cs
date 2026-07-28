@@ -85,7 +85,7 @@ internal class ControlWindow : CtrlWindow
 	ImGui.Text(LocalizationHelper.IsChineseClient ? " 目标: " + autoMode.ToString() : " Targeting: " + autoMode.ToString());
 
 	var aoeType = Service.Config.AoEType;
-	if (ImGuiHelper.SelectableButton((LocalizationHelper.IsChineseClient ? "AoE: " : "AoE: ") + aoeType.ToString()))
+	if (ImGuiHelper.SelectableButton((LocalizationHelper.IsChineseClient ? "范围攻击: " : "AoE: ") + aoeType.ToString()))
 		{
 			aoeType = (ConfigTypes.AoEType)(((int)aoeType + 1) % 3);
 			Service.Config.AoEType = aoeType;
