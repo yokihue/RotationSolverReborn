@@ -1,5 +1,7 @@
 using ECommons.DalamudServices;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Reflection;
 
 namespace RotationSolver.Data
 {
@@ -11,14 +13,38 @@ namespace RotationSolver.Data
         /// <summary>
         /// Detects whether the game client is running in Chinese (Simplified or Traditional).
         /// </summary>
+        private static bool? _isChineseClient;
+
+        /// <summary>
+        /// Detects whether the game client is running in Chinese.
+        /// </summary>
+        /// <remarks>
+        /// Resolved once and cached. This is read on every ImGui frame via
+        /// <c>GetLocalizedDescription</c>, so it must not re-enter Dalamud each time.
+        /// Uses <see cref="Dalamud.Plugin.Services.IClientState.ClientLanguage"/>, which is a
+        /// non-nullable enum, hence no null-conditional access.
+        /// </remarks>
         public static bool IsChineseClient
         {
             get
             {
+                if (_isChineseClient.HasValue)
+                {
+                    return _isChineseClient.Value;
+                }
+
                 try
                 {
-                    var lang = Svc.ClientState?.ClientLanguage?.ToString();
-                    return lang is "Chinese" or "ChineseSimplified";
+                    var clientState = Svc.ClientState;
+                    if (clientState == null)
+                    {
+                        // Services not ready yet; do not cache a wrong answer.
+                        return false;
+                    }
+
+                    var lang = clientState.ClientLanguage.ToString();
+                    _isChineseClient = lang is "Chinese" or "ChineseSimplified" or "ChineseTraditional";
+                    return _isChineseClient.Value;
                 }
                 catch
                 {
@@ -262,7 +288,23 @@ namespace RotationSolver.Data
             {
                 return chinese;
             }
-            return value.GetDescription();
+
+            // Fall back to the raw [Description] attribute, NOT GetDescription().
+            // GetDescription() routes UiString values back into this method, so calling
+            // it here would recurse infinitely for any untranslated enum member.
+            return GetRawDescription(value);
+        }
+
+        /// <summary>
+        /// Reads the <see cref="DescriptionAttribute"/> directly off the enum member.
+        /// Deliberately independent of the localization-aware extension methods so it
+        /// can safely serve as a fallback for them.
+        /// </summary>
+        private static string GetRawDescription(UiString value)
+        {
+            var field = value.GetType().GetField(value.ToString());
+            var attribute = field?.GetCustomAttribute<DescriptionAttribute>();
+            return attribute?.Description ?? value.ToString();
         }
 
         /// <summary>
