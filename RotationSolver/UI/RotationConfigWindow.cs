@@ -2217,6 +2217,17 @@ public partial class RotationConfigWindow : Window
 
 	private string GetHostileTypeDescription(TargetHostileType type)
 	{
+		if (CNLanguageClient)
+		{
+			return type switch
+			{
+				TargetHostileType.AllTargetsCanAttack => "所有可攻击目标（坦克/自动模式）",
+				TargetHostileType.TargetsHaveTarget => "正在被攻击的目标",
+				TargetHostileType.AllTargetsWhenSoloInDuty => "副本内单人时攻击所有目标",
+				TargetHostileType.AllTargetsWhenSolo => "单人时攻击所有目标",
+				_ => "未知目标类型"
+			};
+		}
 		return type switch
 		{
 			TargetHostileType.AllTargetsCanAttack => "All Targets Can Attack aka Tank/Autoduty Mode",

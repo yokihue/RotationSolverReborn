@@ -45,10 +45,10 @@ namespace RotationSolver.Basic.Configuration.RotationConfig
         private static readonly Dictionary<string, string> _translations = new()
         {
             { "Allow Hissatsu Soten to be used on any target regardless of distance (good luck)", "允许必杀剑·九天无视距离对任意目标使用（祝你好运）" },
-            { "Allow Mineuchi to be used on any target rather than just targets that already have Kuzushi status.", "允许刀背击打可用于任意目标，而非仅限于已有'崩し'状态的目标" },
+            { "Allow Mineuchi to be used on any target rather than just targets that already have Kuzushi status.", "允许刀背击打可用于任意目标，而非仅限于已有'崩'状态的目标" },
             { "Allow Sacred Soil while moving if fighting a boss", "与 Boss 战斗时允许移动中使用野战治疗阵" },
             { "Allow Uncoiled Fury and Writhing Snap to overwrite oGCDs when at range", "允许在远程时用蛇尾术/蛇袭覆盖能力技窗口" },
-            { "Allow the use of Corpsacorps while moving (use at own risk).", "允许移动中使用交剑斩（风险自负）" },
+            { "Allow the use of Corpsacorps while moving (use at own risk).", "允许移动中使用交击斩（风险自负）" },
             { "Allow the use of high jump if there are enemies in melee range.", "允许近战范围内使用高跳" },
             { "Army's Paeon Uptime", "军神之歌持续时间" },
             { "Attempt to assign Raging Strikes, Battle Voice, and Radiant Finale to specific ogcd slots (Experimental)", "尝试将猛者、战斗之声和最终乐章分配到特定能力技窗口（实验性）" },
@@ -305,7 +305,7 @@ namespace RotationSolver.Basic.Configuration.RotationConfig
             { "Use DOT while moving even if it does not need refresh (disabling is a damage down)", "移动中使用 DOT 即使不需要刷新（禁用会损失输出）" },
             { "Use Dark Cannon or Shock Cannon in cases where the mob is immune to both blind and paralysis", "怪物免疫目盲和麻痹时使用暗炮/冲击炮" },
             { "Use Dark Cannon or Shock Cannon in cases where the mob is susceptible to both blind and paralysis", "怪物易受目盲和麻痹时使用暗炮/冲击炮" },
-            { "Use Displacement after Engagement (use at own risk).", "交剑斩后使用移转（风险自负）" },
+            { "Use Displacement after Engagement (use at own risk).", "交击斩后使用移转（风险自负）" },
             { "Use Dissipation during burst phases", "爆发阶段使用转化" },
             { "Use Divine Caress as soon as its available", "一有就用神爱抚" },
             { "Use Divine Veil during countdown", "倒计时中使用圣光幕帘" },
