@@ -198,7 +198,11 @@ internal abstract class Searchable(PropertyInfo property) : ISearchable
 		get
 		{
 			var ui = _property.GetCustomAttribute<UIAttribute>();
-			return ui == null ? string.Empty : ui.Name;
+			if (ui == null)
+			{
+				return string.Empty;
+			}
+			return LocalizationHelper.IsChineseClient ? SearchableConfigCN.TryGetName(ui.Name) : ui.Name;
 		}
 	}
 
@@ -207,7 +211,11 @@ internal abstract class Searchable(PropertyInfo property) : ISearchable
 		get
 		{
 			var ui = _property.GetCustomAttribute<UIAttribute>();
-			return ui == null || string.IsNullOrEmpty(ui.Description) ? string.Empty : ui.Description;
+			if (ui == null || string.IsNullOrEmpty(ui.Description))
+			{
+				return string.Empty;
+			}
+			return LocalizationHelper.IsChineseClient ? SearchableConfigCN.TryGetDescription(ui.Description) : ui.Description;
 		}
 	}
 

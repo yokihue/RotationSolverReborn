@@ -2086,9 +2086,11 @@ public partial class RotationConfigWindow : Window
 
 	private void DrawAutoduty()
 	{
-		ImGui.TextWrapped("While the RSR Team has made effort to make RSR compatible with Autoduty, please keep in mind that RSR is not designed with botting in mind.");
+		ImGui.TextWrapped(CNLanguageClient
+			? "虽然 RSR 团队已努力使 RSR 兼容 Autoduty，但请注意 RSR 并非为自动打怪而设计。"
+			: "While the RSR Team has made effort to make RSR compatible with Autoduty, please keep in mind that RSR is not designed with botting in mind.");
 		ImGui.Spacing();
-		ImGui.TextWrapped($"Below are plugins used by Autoduty and their current states");
+		ImGui.TextWrapped(CNLanguageClient ? "以下是 Autoduty 使用的插件及其当前状态" : $"Below are plugins used by Autoduty and their current states");
 		ImGui.Spacing();
 
 		// Create a new list of AutoDutyPlugin objects
@@ -2175,29 +2177,35 @@ public partial class RotationConfigWindow : Window
 				}
 			}
 
-			// Determine the color and text for "Boss Mod"
-			Vector4 color;
-			string text;
-			if (plugin.Name == "Boss Mod" && isBossModEnabled && isBossModRebornEnabled)
-			{
-				color = ImGuiColors.DalamudYellow;
-				text = $"{plugin.Name} is {(isEnabled ? "installed and enabled" : "not enabled")}. Both Boss Mods cannot be installed and enabled at the same time. Please disable Boss Mod.";
-			}
-			else if (plugin.Name == "Boss Mod" && isBossModEnabled && !isBossModRebornEnabled)
-			{
-				color = isEnabled ? ImGuiColors.DalamudYellow : ImGuiColors.DalamudRed;
-				text = $"{plugin.Name} is {(isEnabled ? "installed and enabled" : "not enabled")}. Please use BossModReborn instead, BMR has specific integration with RSR that improves RSRs ability to react to combat i.e. Gaze effects.";
-			}
-			else if (plugin.Name == "BossModReborn" && isBossModRebornEnabled && !isBossModEnabled)
-			{
-				color = isEnabled ? ImGuiColors.ParsedGreen : ImGuiColors.DalamudRed;
-				text = $"{plugin.Name} is {(isEnabled ? "installed and enabled" : "not enabled")}.";
-			}
-			else
-			{
-				color = isEnabled ? ImGuiColors.ParsedGreen : ImGuiColors.DalamudRed;
-				text = $"{plugin.Name} is {(isEnabled ? "installed and enabled" : "not enabled")}";
-			}
+		// Determine the color and text for "Boss Mod"
+		Vector4 color;
+		string text;
+		string statusEnabled = CNLanguageClient ? "已安装并启用" : "installed and enabled";
+		string statusNotEnabled = CNLanguageClient ? "未启用" : "not enabled";
+		if (plugin.Name == "Boss Mod" && isBossModEnabled && isBossModRebornEnabled)
+		{
+			color = ImGuiColors.DalamudYellow;
+			text = CNLanguageClient
+				? $"{plugin.Name} {statusEnabled}。两个 Boss Mod 不能同时安装启用，请禁用 Boss Mod。"
+				: $"{plugin.Name} is {(isEnabled ? statusEnabled : statusNotEnabled)}. Both Boss Mods cannot be installed and enabled at the same time. Please disable Boss Mod.";
+		}
+		else if (plugin.Name == "Boss Mod" && isBossModEnabled && !isBossModRebornEnabled)
+		{
+			color = isEnabled ? ImGuiColors.DalamudYellow : ImGuiColors.DalamudRed;
+			text = CNLanguageClient
+				? $"{plugin.Name} {statusEnabled}。请使用 BossModReborn 替代，BMR 与 RSR 有特定集成，能改善 RSR 对战斗的响应（如凝视效果）。"
+				: $"{plugin.Name} is {(isEnabled ? statusEnabled : statusNotEnabled)}. Please use BossModReborn instead, BMR has specific integration with RSR that improves RSRs ability to react to combat i.e. Gaze effects.";
+		}
+		else if (plugin.Name == "BossModReborn" && isBossModRebornEnabled && !isBossModEnabled)
+		{
+			color = isEnabled ? ImGuiColors.ParsedGreen : ImGuiColors.DalamudRed;
+			text = $"{plugin.Name} {(isEnabled ? statusEnabled : statusNotEnabled)}";
+		}
+		else
+		{
+			color = isEnabled ? ImGuiColors.ParsedGreen : ImGuiColors.DalamudRed;
+			text = $"{plugin.Name} {(isEnabled ? statusEnabled : statusNotEnabled)}";
+		}
 
 			ImGui.PushStyleColor(ImGuiCol.Text, color);
 			ImGui.TextWrapped(text);
