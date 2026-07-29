@@ -58,7 +58,7 @@ public partial class RotationConfigWindow : Window
 	private bool _rsrIconTriggered = false;
 	private const double RsrIconHoldSeconds = 1.2;
 
-	public bool CNLanguageClient => _cachedDiagInfo?.Language.ToString() is "Chinese" or "ChineseSimplified";
+	public bool CNLanguageClient => LocalizationHelper.IsChineseClient;
 
 	private static readonly string[] _supporters =
 	[
@@ -329,7 +329,7 @@ public partial class RotationConfigWindow : Window
 	{
 		if (_showResetPopup)
 		{
-			ImGui.OpenPopup("Reset RSR Plugin Settings");
+			ImGui.OpenPopup(CNLanguageClient ? "重置 RSR 插件设置" : "Reset RSR Plugin Settings");
 			_showResetPopup = false;
 		}
 
@@ -349,7 +349,7 @@ public partial class RotationConfigWindow : Window
 		using var popupScrollbarRounding = ImRaii.PushStyle(ImGuiStyleVar.ScrollbarRounding, 11f * Scale);
 		using var popupGrabRounding = ImRaii.PushStyle(ImGuiStyleVar.GrabRounding, 11f * Scale);
 		using var popupTabRounding = ImRaii.PushStyle(ImGuiStyleVar.TabRounding, 11f * Scale);
-		if (ImGui.BeginPopupModal("Reset RSR Plugin Settings"))
+		if (ImGui.BeginPopupModal(CNLanguageClient ? "重置 RSR 插件设置" : "Reset RSR Plugin Settings"))
 		{
 			if (CNLanguageClient)
 			{
@@ -699,7 +699,7 @@ public partial class RotationConfigWindow : Window
 					}, Math.Max(Scale * MIN_COLUMN_WIDTH, wholeWidth), iconSize);
 
 					var desc = displayName;
-					var addition = item.GetDescription();
+					var addition = item.GetLocalizedDescription();
 					if (!string.IsNullOrEmpty(addition))
 					{
 						desc += "\n \n" + addition;
@@ -717,7 +717,7 @@ public partial class RotationConfigWindow : Window
 					if (ImGui.IsItemHovered())
 					{
 						ImGui.SetMouseCursor(ImGuiMouseCursor.Hand);
-						var desc = item.GetDescription();
+						var desc = item.GetLocalizedDescription();
 						if (!string.IsNullOrEmpty(desc))
 						{
 							ImguiTooltips.ShowTooltip(desc);
@@ -886,7 +886,7 @@ public partial class RotationConfigWindow : Window
 		if (BMRTimeline_IPCSubscriber.IsEnabled)
 		{
 			ImGui.Separator();
-			ImGui.TextColored(ImGuiColors.ParsedGreen, "BMR Integration Enabled");
+			ImGui.TextColored(ImGuiColors.ParsedGreen, CNLanguageClient ? "BMR 集成已启用" : "BMR Integration Enabled");
 		}
 	}
 	private static readonly string[] pairsArray = ["Delete"];
@@ -1327,7 +1327,7 @@ public partial class RotationConfigWindow : Window
 
 					default:
 						// Handle unexpected tab values
-						ImGui.Text("Unknown tab selected.");
+						ImGui.Text(CNLanguageClient ? "选择了未知标签页。" : "Unknown tab selected.");
 						break;
 				}
 			}
@@ -1778,7 +1778,7 @@ public partial class RotationConfigWindow : Window
 		}
 
 		ImGui.Spacing();
-		if (ImGui.Button("Open First Start Tutorial"))
+		if (ImGui.Button(LocalizationHelper.IsChineseClient ? "打开首次使用教程" : "Open First Start Tutorial"))
 		{
 			Service.Config.TutorialDone = false;
 		}
@@ -1830,7 +1830,7 @@ public partial class RotationConfigWindow : Window
 	private static void DrawThanksToSupporters()
 	{
 		// Ko-fi CTA
-		if (ImGui.Button("Join this list!"))
+		if (ImGui.Button(LocalizationHelper.IsChineseClient ? "加入此列表！" : "Join this list!"))
 		{
 			Util.OpenLink("https://ko-fi.com/ltscombatreborn");
 		}
@@ -1842,7 +1842,7 @@ public partial class RotationConfigWindow : Window
 		// Defensive: ensure we have supporters
 		if (_supporters == null || _supporters.Length == 0)
 		{
-			ImGui.TextWrapped("No supporters to display yet. Thank you for checking!");
+			ImGui.TextWrapped(LocalizationHelper.IsChineseClient ? "暂无可显示的支持者，感谢关注！" : "No supporters to display yet. Thank you for checking!");
 			return;
 		}
 
@@ -1850,7 +1850,7 @@ public partial class RotationConfigWindow : Window
 		using (var _ = ImRaii.PushFont(FontManager.GetFont(16)))
 		using (var __ = ImRaii.PushColor(ImGuiCol.Text, ImGui.ColorConvertFloat4ToU32(ImGuiColors.ParsedGreen)))
 		{
-			ImGui.TextWrapped($"Special thanks to the {_supporters.Length} supporters (including those not listed here):");
+			ImGui.TextWrapped(LocalizationHelper.IsChineseClient ? $"特别感谢 {_supporters.Length} 位支持者（包括未在此列出的支持者）：" : $"Special thanks to the {_supporters.Length} supporters (including those not listed here):");
 		}
 
 		ImGui.Spacing();
@@ -1968,19 +1968,19 @@ public partial class RotationConfigWindow : Window
 
 			// Set up table headers
 			_ = ImGui.TableNextColumn();
-			ImGui.TableHeader("Name");
+			ImGui.TableHeader(LocalizationHelper.IsChineseClient ? "名称" : "Name");
 
 			_ = ImGui.TableNextColumn();
-			ImGui.TableHeader("Icon/Link");
+			ImGui.TableHeader(LocalizationHelper.IsChineseClient ? "图标/链接" : "Icon/Link");
 
 			_ = ImGui.TableNextColumn();
-			ImGui.TableHeader("Features");
+			ImGui.TableHeader(LocalizationHelper.IsChineseClient ? "功能" : "Features");
 
 			_ = ImGui.TableNextColumn();
-			ImGui.TableHeader("Type");
+			ImGui.TableHeader(LocalizationHelper.IsChineseClient ? "类型" : "Type");
 
 			_ = ImGui.TableNextColumn();
-			ImGui.TableHeader("Enabled");
+			ImGui.TableHeader(LocalizationHelper.IsChineseClient ? "已启用" : "Enabled");
 
 			// Ensure that IncompatiblePlugins is not null
 			var incompatiblePlugins = PluginCompatibility.IncompatiblePlugins;
@@ -2014,7 +2014,7 @@ public partial class RotationConfigWindow : Window
 				DisplayPluginType(item.Type);
 
 				_ = ImGui.TableNextColumn();
-				ImGui.Text(item.IsEnabled ? "Yes" : "No");
+				ImGui.Text(LocalizationHelper.IsChineseClient ? (item.IsEnabled ? "是" : "否") : (item.IsEnabled ? "Yes" : "No"));
 			}
 		}
 	}
@@ -2081,7 +2081,7 @@ public partial class RotationConfigWindow : Window
 		else
 		{
 			// Handle the case where the texture is not found
-			ImGui.Text("Failed to load GitHub icon.");
+			ImGui.Text(LocalizationHelper.IsChineseClient ? "无法加载 GitHub 图标。" : "Failed to load GitHub icon.");
 		}
 	}
 	#endregion
@@ -2149,7 +2149,7 @@ public partial class RotationConfigWindow : Window
 			{
 				if (DalamudReflector.HasRepo(plugin.Url) && !isInstalled)
 				{
-					if (ImGui.Button($"Add Plugin##{plugin.Name}"))
+					if (ImGui.Button($"{(CNLanguageClient ? "添加插件" : "Add Plugin")}##{plugin.Name}"))
 					{
 						PluginLog.Information($"Attempting to add plugin: {plugin.Name} from URL: {plugin.Url}");
 						_ = DalamudReflector.AddPlugin(plugin.Url, plugin.Name).ContinueWith(t =>
@@ -2170,7 +2170,7 @@ public partial class RotationConfigWindow : Window
 				}
 				else if (!DalamudReflector.HasRepo(plugin.Url))
 				{
-					if (ImGui.Button($"Add Repo##{plugin.Name}"))
+					if (ImGui.Button($"{(CNLanguageClient ? "添加仓库" : "Add Repo")}##{plugin.Name}"))
 					{
 						PluginLog.Information($"Attempting to add repository: {plugin.Url}");
 						DalamudReflector.AddRepo(plugin.Url, true);
@@ -2723,13 +2723,13 @@ public partial class RotationConfigWindow : Window
 		if (Player.Available && DataCenter.PartyMembers != null && Player.Object != null && Player.Object.IsJobs(Job.DNC))
 		{
 			ImGui.Spacing();
-			ImGui.Text("Dance Partner Priority");
+			ImGui.Text(LocalizationHelper.IsChineseClient ? "舞伴优先级" : "Dance Partner Priority");
 			ImGui.Spacing();
 			//var currentDancePartnerPriority = ActionTargetInfo.FindTargetByType(DataCenter.PartyMembers, TargetType.DancePartner, 0, SpecialActionType.None);
 			//ImGui.Text($"Current Target: {currentDancePartnerPriority?.Name ?? "None"}");
 			//ImGui.Spacing();
 
-			if (ImGui.Button("Reset to Default"))
+			if (ImGui.Button(LocalizationHelper.IsChineseClient ? "恢复默认" : "Reset to Default"))
 			{
 				OtherConfiguration.ResetDancePartnerPriority();
 			}
@@ -2775,13 +2775,13 @@ public partial class RotationConfigWindow : Window
 		if (Player.Available && DataCenter.PartyMembers != null && Player.Object != null && Player.Object.IsJobs(Job.SGE))
 		{
 			ImGui.Spacing();
-			ImGui.Text("Kardia Tank Priority");
+			ImGui.Text(LocalizationHelper.IsChineseClient ? "心关坦克优先级" : "Kardia Tank Priority");
 			ImGui.Spacing();
 			//var currentKardiaTankPriority = ActionTargetInfo.FindTargetByType(DataCenter.PartyMembers, TargetType.Kardia, 0, SpecialActionType.None);
 			//ImGui.Text($"Current Target: {currentKardiaTankPriority?.Name ?? "None"}");
 			//ImGui.Spacing();
 
-			if (ImGui.Button("Reset to Default"))
+			if (ImGui.Button(LocalizationHelper.IsChineseClient ? "恢复默认" : "Reset to Default"))
 			{
 				OtherConfiguration.ResetKardiaTankPriority();
 			}
@@ -2835,13 +2835,13 @@ public partial class RotationConfigWindow : Window
 			// Column 1: Spear Card Priority
 			ImGui.TableNextColumn();
 			ImGui.Spacing();
-			ImGui.Text("Spear Card Priority");
+			ImGui.Text(LocalizationHelper.IsChineseClient ? "战争神之枪优先级" : "Spear Card Priority");
 			ImGui.Spacing();
 			//var currentTheSpearPriority = ActionTargetInfo.FindTargetByType(DataCenter.PartyMembers, TargetType.TheSpear, 0, SpecialActionType.None);
 			//ImGui.Text($"Current Target: {currentTheSpearPriority?.Name ?? "None"}");
 			//ImGui.Spacing();
 
-			if (ImGui.Button("Reset to Default##Spear"))
+			if (ImGui.Button(LocalizationHelper.IsChineseClient ? "恢复默认##Spear" : "Reset to Default##Spear"))
 			{
 				OtherConfiguration.ResetTheSpearPriority();
 			}
@@ -2886,13 +2886,13 @@ public partial class RotationConfigWindow : Window
 			// Column 2: Balance Card Priority
 			ImGui.TableNextColumn();
 			ImGui.Spacing();
-			ImGui.Text("Balance Card Priority");
+			ImGui.Text(LocalizationHelper.IsChineseClient ? "太阳神之衡优先级" : "Balance Card Priority");
 			ImGui.Spacing();
 			//var currentTheBalancePriority = ActionTargetInfo.FindTargetByType(DataCenter.PartyMembers, TargetType.TheBalance, 0, SpecialActionType.None);
 			//ImGui.Text($"Current Target: {currentTheBalancePriority?.Name ?? "None"}");
 			//ImGui.Spacing();
 
-			if (ImGui.Button("Reset to Default##Balance"))
+			if (ImGui.Button(LocalizationHelper.IsChineseClient ? "恢复默认##Balance" : "Reset to Default##Balance"))
 			{
 				OtherConfiguration.ResetTheBalancePriority();
 			}
@@ -3576,28 +3576,28 @@ public partial class RotationConfigWindow : Window
 			ImGui.TableNextRow(ImGuiTableRowFlags.Headers);
 
 			_ = ImGui.TableNextColumn();
-			if (ImGui.Button("Reset and Update Invuln Status List"))
+			if (ImGui.Button(LocalizationHelper.IsChineseClient ? "重置并更新无敌状态列表" : "Reset and Update Invuln Status List"))
 			{
 				OtherConfiguration.ResetInvincibleStatus();
 			}
 			ImGui.TableHeader(UiString.ConfigWindow_List_Invincibility.GetDescription());
 
 			_ = ImGui.TableNextColumn();
-			if (ImGui.Button("Reset and Update Priority Status List"))
+			if (ImGui.Button(LocalizationHelper.IsChineseClient ? "重置并更新优先状态列表" : "Reset and Update Priority Status List"))
 			{
 				OtherConfiguration.ResetPriorityStatus();
 			}
 			ImGui.TableHeader(UiString.ConfigWindow_List_Priority.GetDescription());
 
 			_ = ImGui.TableNextColumn();
-			if (ImGui.Button("Reset and Update Dispell Debuff List"))
+			if (ImGui.Button(LocalizationHelper.IsChineseClient ? "重置并更新可驱散减益列表" : "Reset and Update Dispell Debuff List"))
 			{
 				OtherConfiguration.ResetDangerousStatus();
 			}
 			ImGui.TableHeader(UiString.ConfigWindow_List_DangerousStatus.GetDescription());
 
 			_ = ImGui.TableNextColumn();
-			if (ImGui.Button("Reset and Update No Casting Status List"))
+			if (ImGui.Button(LocalizationHelper.IsChineseClient ? "重置并更新禁止施法状态列表" : "Reset and Update No Casting Status List"))
 			{
 				OtherConfiguration.ResetNoCastingStatus();
 			}
@@ -3752,7 +3752,7 @@ public partial class RotationConfigWindow : Window
 		if (popup)
 		{
 			ImGui.SetNextItemWidth(InputWidth * Scale);
-			_ = ImGui.InputTextWithHint("##Searching the status", "Enter status name/number", ref searching, InputTextLength);
+			_ = ImGui.InputTextWithHint("##Searching the status", LocalizationHelper.IsChineseClient ? "输入状态名称或编号" : "Enter status name/number", ref searching, InputTextLength);
 
 			ImGui.Spacing();
 
@@ -3795,7 +3795,7 @@ public partial class RotationConfigWindow : Window
 
 				if (filtered.Count == 0)
 				{
-					ImGui.TextColored(ImGuiColors.DalamudRed, "No matching statuses found.");
+					ImGui.TextColored(ImGuiColors.DalamudRed, LocalizationHelper.IsChineseClient ? "未找到匹配的状态。" : "No matching statuses found.");
 					return;
 				}
 
@@ -3832,28 +3832,28 @@ public partial class RotationConfigWindow : Window
 			ImGui.TableNextRow(ImGuiTableRowFlags.Headers);
 
 			_ = ImGui.TableNextColumn();
-			if (ImGui.Button("Reset and Update Tankbuster List"))
+			if (ImGui.Button(LocalizationHelper.IsChineseClient ? "重置并更新死刑列表" : "Reset and Update Tankbuster List"))
 			{
 				OtherConfiguration.ResetHostileCastingTank();
 			}
 			ImGui.TableHeader(UiString.ConfigWindow_List_HostileCastingTank.GetDescription());
 
 			_ = ImGui.TableNextColumn();
-			if (ImGui.Button("Reset and Update AOE List"))
+			if (ImGui.Button(LocalizationHelper.IsChineseClient ? "重置并更新范围攻击列表" : "Reset and Update AOE List"))
 			{
 				OtherConfiguration.ResetHostileCastingArea();
 			}
 			ImGui.TableHeader(UiString.ConfigWindow_List_HostileCastingArea.GetDescription());
 
 			_ = ImGui.TableNextColumn();
-			if (ImGui.Button("Reset and Update Knockback List"))
+			if (ImGui.Button(LocalizationHelper.IsChineseClient ? "重置并更新击退列表" : "Reset and Update Knockback List"))
 			{
 				OtherConfiguration.ResetHostileCastingKnockback();
 			}
 			ImGui.TableHeader(UiString.ConfigWindow_List_HostileCastingKnockback.GetDescription());
 
 			_ = ImGui.TableNextColumn();
-			if (ImGui.Button("Reset and Stop Casting List"))
+			if (ImGui.Button(LocalizationHelper.IsChineseClient ? "重置并更新停止施法列表" : "Reset and Stop Casting List"))
 			{
 				OtherConfiguration.ResetHostileCastingStop();
 			}
@@ -3986,7 +3986,7 @@ public partial class RotationConfigWindow : Window
 			{
 				if (string.IsNullOrWhiteSpace(_actionPopupSearching))
 				{
-					ImGui.TextColored(ImGuiColors.DalamudYellow, "Enter a search term to filter actions.");
+					ImGui.TextColored(ImGuiColors.DalamudYellow, LocalizationHelper.IsChineseClient ? "输入搜索词以筛选技能。" : "Enter a search term to filter actions.");
 					// Clear cached results when no query
 					if (!string.IsNullOrEmpty(_lastActionPopupSearching))
 					{
@@ -4069,7 +4069,7 @@ public partial class RotationConfigWindow : Window
 
 					if (shown == 0)
 					{
-						ImGui.TextColored(ImGuiColors.DalamudRed, "No matching actions found.");
+						ImGui.TextColored(ImGuiColors.DalamudRed, LocalizationHelper.IsChineseClient ? "未找到匹配的技能。" : "No matching actions found.");
 					}
 				}
 			}

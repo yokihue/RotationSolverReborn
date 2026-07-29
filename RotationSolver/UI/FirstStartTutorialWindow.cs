@@ -1,4 +1,4 @@
-﻿using Dalamud.Interface.Colors;
+using Dalamud.Interface.Colors;
 using Dalamud.Interface.Windowing;
 using ECommons.DalamudServices;
 using RotationSolver.Data;

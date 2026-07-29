@@ -1,5 +1,6 @@
-﻿using Dalamud.Interface.Colors;
+using Dalamud.Interface.Colors;
 using Dalamud.Interface.Windowing;
+using RotationSolver.Data;
 
 namespace RotationSolver.UI;
 
@@ -49,7 +50,7 @@ internal class InterceptedActionWindow : Window
 		var totalWidth = gcdWidth + abilityWidth + ImGui.GetStyle().ItemSpacing.X;
 
 		// Title
-		var title = "Intercept System";
+		var title = LocalizationHelper.IsChineseClient ? "拦截系统" : "Intercept System";
 		ImGui.SetCursorPosX(ImGui.GetCursorPosX() + (totalWidth / 2) - (ImGui.CalcTextSize(title).X / 2));
 		ImGui.TextColored(ImGuiColors.DalamudYellow, title);
 
@@ -61,12 +62,12 @@ internal class InterceptedActionWindow : Window
 		// If there's no current intercepted action, show placeholder text
 		if (cur == null)
 		{
-			ImGui.TextColored(ImGuiColors.DalamudGrey, "No intercepted actions queued.");
+			ImGui.TextColored(ImGuiColors.DalamudGrey, LocalizationHelper.IsChineseClient ? "没有排队中的拦截技能。" : "No intercepted actions queued.");
 			return;
 		}
 
 		// Draw current intercepted action (large / left)
-		ImGui.TextColored(ImGuiColors.DalamudWhite, "Current Intercepted Action");
+		ImGui.TextColored(ImGuiColors.DalamudWhite, LocalizationHelper.IsChineseClient ? "当前拦截技能" : "Current Intercepted Action");
 		ControlWindow.DrawIAction(cur, gcdWidth, 1);
 	}
 }

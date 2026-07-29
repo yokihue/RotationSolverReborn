@@ -1,4 +1,4 @@
-﻿using Dalamud.Utility.Signatures;
+using Dalamud.Utility.Signatures;
 using ECommons.DalamudServices;
 using ECommons.EzHookManager;
 using ECommons.GameFunctions;
@@ -25,6 +25,21 @@ internal class Service : IDisposable
 	public const string OFFCOMMAND = "/rotation Off";
 	public const string USERNAME = "FFXIV-CombatReborn";
 	public const string REPO = "RotationSolverReborn";
+	private static readonly Lazy<bool> IsChineseClientCache = new(DetectChineseClient);
+	internal static bool IsChineseClient => IsChineseClientCache.Value;
+
+	private static bool DetectChineseClient()
+	{
+		try
+		{
+			return Svc.ClientState?.ClientLanguage.ToString() is "Chinese" or "ChineseSimplified" or "ChineseTraditional";
+		}
+		catch (Exception ex)
+		{
+			PluginLog.Warning($"Failed to detect client language: {ex.Message}");
+			return false;
+		}
+	}
 
 	[EzHook("40 53 55 56 57 48 81 EC ?? ?? ?? ?? 0F 29 B4 24 ?? ?? ?? ?? 48 8B 05 ?? ?? ?? ?? 48 33 C4 48 89 84 24 ?? ?? ?? ?? 0F B6 AC 24 ?? ?? ?? ?? 0F 28 F3 49 8B F8", nameof(ActorVfxCreateDetour), true)]
 	private readonly EzHook<ActorVfxCreateDelegate2> actorVfxCreateHook = null!;

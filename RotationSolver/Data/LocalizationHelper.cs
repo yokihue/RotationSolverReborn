@@ -1,4 +1,5 @@
 using ECommons.DalamudServices;
+using RotationSolver.UI;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Reflection;
@@ -13,45 +14,7 @@ namespace RotationSolver.Data
         /// <summary>
         /// Detects whether the game client is running in Chinese (Simplified or Traditional).
         /// </summary>
-        private static bool? _isChineseClient;
-
-        /// <summary>
-        /// Detects whether the game client is running in Chinese.
-        /// </summary>
-        /// <remarks>
-        /// Resolved once and cached. This is read on every ImGui frame via
-        /// <c>GetLocalizedDescription</c>, so it must not re-enter Dalamud each time.
-        /// Uses <see cref="Dalamud.Plugin.Services.IClientState.ClientLanguage"/>, which is a
-        /// non-nullable enum, hence no null-conditional access.
-        /// </remarks>
-        public static bool IsChineseClient
-        {
-            get
-            {
-                if (_isChineseClient.HasValue)
-                {
-                    return _isChineseClient.Value;
-                }
-
-                try
-                {
-                    var clientState = Svc.ClientState;
-                    if (clientState == null)
-                    {
-                        // Services not ready yet; do not cache a wrong answer.
-                        return false;
-                    }
-
-                    var lang = clientState.ClientLanguage.ToString();
-                    _isChineseClient = lang is "Chinese" or "ChineseSimplified" or "ChineseTraditional";
-                    return _isChineseClient.Value;
-                }
-                catch
-                {
-                    return false;
-                }
-            }
-        }
+        public static bool IsChineseClient => Service.IsChineseClient;
         private static readonly Dictionary<UiString, string> _chineseStrings = new()
         {
             { UiString.ConfigWindow_ConditionSetDesc, "您选择的条件值。点击修改。" },
@@ -318,32 +281,26 @@ namespace RotationSolver.Data
         /// <summary>
         /// Gets the Chinese (Simplified) translation for a RotationConfigWindowTab description.
         /// </summary>
-        public static string GetTabDescriptionCN(string tabDescription)
+        public static string GetTabDescriptionCN(RotationConfigWindowTab tab)
         {
-            return tabDescription switch
+            return tab switch
             {
-                "Useful information and macro list." => "实用信息和宏列表。",
-                "Rotation specific configs." => "职业循环专属配置。",
-                "Configure Duty Rotation." => "配置副本循环。",
-                "Configure abilities and custom conditions for your current job." => "配置当前职业的技能和自定义条件。",
-                "Configure reactive actions and status effect lists." => "配置响应技能和状态效果列表。",
-                "Configure basic settings." => "配置基础设置。",
-                "Configure user interface settings." => "配置用户界面设置。",
-                "Configure general action usage and control settings." => "配置常规技能使用和控制设置。",
-                "Configure targeting settings." => "配置目标选择设置。",
-                "Duty specific settings." => "副本专属设置。",
-                "Configure optional helpful features." => "配置可选实用功能。",
-                "Debug options for developers and rotation writers (disable when not in use)." => "面向开发者和循环编写者的调试选项（不用时请禁用）。",
-                "Configure AutoDuty settings and view related information." => "配置 AutoDuty 设置并查看相关信息。",
-                _ => tabDescription
+                RotationConfigWindowTab.Main => "实用信息和宏列表。",
+                RotationConfigWindowTab.Job => "职业循环专属配置。",
+                RotationConfigWindowTab.DutyRotation => "配置副本循环。",
+                RotationConfigWindowTab.Actions => "配置当前职业的技能和自定义条件。",
+                RotationConfigWindowTab.List => "配置响应技能和状态效果列表。",
+                RotationConfigWindowTab.Basic => "配置基础设置。",
+                RotationConfigWindowTab.UI => "配置用户界面设置。",
+                RotationConfigWindowTab.Auto => "配置常规技能使用和控制设置。",
+                RotationConfigWindowTab.Target => "配置目标选择设置。",
+                RotationConfigWindowTab.Duty => "副本专属设置。",
+                RotationConfigWindowTab.Extra => "配置可选实用功能。",
+                RotationConfigWindowTab.Debug => "面向开发者和循环编写者的调试选项（不用时请禁用）。",
+                RotationConfigWindowTab.AutoDuty => "配置 AutoDuty 设置并查看相关信息。",
+                _ => tab.ToString()
             };
         }
-
-        /// <summary>
-        /// General-purpose English-to-Chinese translation for enum descriptions that
-        /// are not <see cref="UiString"/> values (e.g. <see cref="SpecialCommandType"/>,
-        /// <see cref="StateCommandType"/>, and other enum display strings).
-        /// </summary>
         private static readonly Dictionary<string, string> _generalTranslations = new()
         {
             // SpecialCommandType descriptions

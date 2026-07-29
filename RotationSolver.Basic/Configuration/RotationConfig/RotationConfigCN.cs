@@ -1,4 +1,3 @@
-using ECommons.DalamudServices;
 using System.Collections.Generic;
 
 namespace RotationSolver.Basic.Configuration.RotationConfig
@@ -11,37 +10,6 @@ namespace RotationSolver.Basic.Configuration.RotationConfig
         /// <summary>
         /// Cached language check; resolved once and reused.
         /// </summary>
-        private static bool? _isChineseClient;
-
-        /// <summary>
-        /// Detects whether the game client is running in Chinese (Simplified or Traditional).
-        /// Safe to call before Dalamud services are fully initialised.
-        /// </summary>
-        private static bool IsChineseClient()
-        {
-            if (_isChineseClient.HasValue)
-            {
-                return _isChineseClient.Value;
-            }
-
-            try
-            {
-                var clientState = Svc.ClientState;
-                if (clientState == null)
-                {
-                    return false;
-                }
-
-                var lang = clientState.ClientLanguage.ToString();
-                _isChineseClient = lang is "Chinese" or "ChineseSimplified" or "ChineseTraditional";
-                return _isChineseClient.Value;
-            }
-            catch
-            {
-                return false;
-            }
-        }
-
         private static readonly Dictionary<string, string> _translations = new()
         {
             { "Allow Hissatsu Soten to be used on any target regardless of distance (good luck)", "允许必杀剑·九天无视距离对任意目标使用（祝你好运）" },
@@ -59,8 +27,8 @@ namespace RotationSolver.Basic.Configuration.RotationConfig
             { "Auto Use Perfect Balance (single target full auto mode, turn me off if you want total control of PB)", "自动使用震脚（单体全自动模式，如想完全控制震脚请关闭）" },
             { "Auto Use Vril", "自动使用 Vril" },
             { "Automatically upgrade Horoscope with Helios/Aspected Helios", "自动用阳星/阳星相位升级天星冲日" },
-            { "Average health threshold party members need to be to use Holos", "使用全体时队员需要的平均 HP 阈值" },
-            { "Average health threshold party members need to be to use Pneuma as an AOE heal", "使用圣灵进行 AOE 治疗时队员需要的平均 HP 阈值" },
+            { "Average health threshold party members need to be to use Holos", "使用整体论时队员需要的平均 HP 阈值" },
+            { "Average health threshold party members need to be to use Pneuma as an AOE heal", "使用魂灵风息进行 AOE 治疗时队员需要的平均 HP 阈值" },
             { "Average party HP percent needed to use Occult Elixir", "使用神秘灵液的队员平均 HP 阈值" },
             { "Average party HP percent to predict to heal instead of damage things", "小队平均 HP 低于此比例时，优先治疗而非输出" },
             { "Average party HP percent to predict to heal with judgement instead of damage things", "小队平均 HP 低于此比例时，优先使用判决治疗而非输出" },
@@ -73,14 +41,14 @@ namespace RotationSolver.Basic.Configuration.RotationConfig
             { "Average party HP percent to use Indomitability", "使用不屈不挠之策的小队平均 HP 阈值" },
             { "Average party HP percent to use Recitation with Indomitability (must be below AoE heal threshold)", "使用复诵不屈不挠之策的小队平均 HP 阈值（必须低于 AOE 治疗阈值）" },
             { "Average party HP percent to use Whispering Dawn or Angel's Whisper", "使用低语黎明/天使的低语的小队平均 HP 阈值" },
-            { "Average party HP threshold to use Druochole", "使用灵橡胆汁的队员平均 HP 阈值" },
-            { "Average party HP threshold to use Ixochole", "使用灵犀胆汁的队员平均 HP 阈值" },
+            { "Average party HP threshold to use Druochole", "使用灵橡清汁的队员平均 HP 阈值" },
+            { "Average party HP threshold to use Ixochole", "使用寄生清汁的队员平均 HP 阈值" },
             { "Average party HP threshold to use Pepsis", "使用消化的队员平均 HP 阈值" },
-            { "Average party HP threshold to use Physis", "使用自然的队员平均 HP 阈值" },
-            { "Average party HP threshold to use Pneuma in Multi Targets", "多目标中使用圣灵的队员平均 HP 阈值" },
-            { "Average party HP threshold to use Pneuma in Single Target", "单体中使用圣灵的队员平均 HP 阈值" },
-            { "Average party HP threshold to use Taurochole", "使用灵牛胆汁的队员平均 HP 阈值" },
-            { "Average party HP threshold to use Zoe on Pneuma (if lower) or Eukrasian Prognosis (if higher)", "使用活力+圣灵（较低 HP）或活力+均衡预后（较高 HP）的队员平均 HP 阈值" },
+            { "Average party HP threshold to use Physis", "使用自生的队员平均 HP 阈值" },
+            { "Average party HP threshold to use Pneuma in Multi Targets", "多目标中使用魂灵风息的队员平均 HP 阈值" },
+            { "Average party HP threshold to use Pneuma in Single Target", "单体中使用魂灵风息的队员平均 HP 阈值" },
+            { "Average party HP threshold to use Taurochole", "使用白牛清汁的队员平均 HP 阈值" },
+            { "Average party HP threshold to use Zoe on Pneuma (if lower) or Eukrasian Prognosis (if higher)", "使用活化+魂灵风息（较低 HP）或活化+均衡预后（较高 HP）的队员平均 HP 阈值" },
             { "BMR: Dump Heat before downtime (Experimental)", "BMR：停手前倾泻热量（实验性）" },
             { "Blood Gauge Strategy", "血债量谱策略" },
             { "Bloodwhetting/Raw intuition heal threshold", "原初的血气/原初的直觉治疗阈值" },
@@ -123,24 +91,24 @@ namespace RotationSolver.Basic.Configuration.RotationConfig
             { "Freely use burst damage oGCDs", "自由使用爆发伤害能力技" },
             { "Guardian HP Threshold", "守护 HP 阈值" },
             { "Hallowed Guardian HP Threshold", "神圣领域+守护 HP 阈值" },
-            { "Health threshold Kardion target needs to be to use Soteria", "发炎目标需要使用拯救的 HP 阈值" },
+            { "Health threshold Kardion target needs to be to use Soteria", "心关目标需要使用拯救的 HP 阈值" },
             { "Health threshold for Cover (Set to 0 to disable)", "掩护使用的目标生命阈值（设为 0 禁用）" },
             { "Health threshold for Intervention (Set to 0 to disable)", "干预使用的目标生命阈值（设为 0 禁用）" },
             { "Health threshold for using Intervention to attempt to save someone", "使用干预救人的目标生命阈值" },
             { "Health threshold needed to use Tempura Coat", "使用天衣无缝所需的 HP 阈值" },
             { "Health threshold needed to use Tengentsu/ThirdEye outside of AOE mit scenarios.", "AOE 减伤场景之外使用天眼通/心眼所需的 HP 阈值" },
             { "Health threshold party member needs to be to use Krasis", "队员需要使用混合的 HP 阈值" },
-            { "Health threshold party member needs to be to use Pneuma as a ST heal", "队员需要使用圣灵进行单体治疗的 HP 阈值" },
+            { "Health threshold party member needs to be to use Pneuma as a ST heal", "队员需要使用魂灵风息进行单体治疗的 HP 阈值" },
             { "Health threshold party member needs to be to use Soteria", "队员需要使用拯救的 HP 阈值" },
-            { "Health threshold party member needs to be to use Taurochole", "队员需要使用灵牛胆汁的 HP 阈值" },
+            { "Health threshold party member needs to be to use Taurochole", "队员需要使用白牛清汁的 HP 阈值" },
             { "Health threshold party member needs to be to use an OGCD Heal while not holding addersgal stacks", "没有蛇胆充能时，队员需要 OGCD 治疗的 HP 阈值" },
             { "Health threshold tank party member needs to use Krasis", "坦克队员需要使用混合的 HP 阈值" },
-            { "Health threshold tank party member needs to use Pneuma as a ST heal", "坦克队员需要使用圣灵进行单体治疗的 HP 阈值" },
-            { "Health threshold tank party member needs to use Pneuma as an AOE heal", "坦克队员需要使用圣灵进行 AOE 治疗的 HP 阈值" },
-            { "Health threshold tank party member needs to use Zoe", "坦克队员需要使用活力的 HP 阈值" },
+            { "Health threshold tank party member needs to use Pneuma as a ST heal", "坦克队员需要使用魂灵风息进行单体治疗的 HP 阈值" },
+            { "Health threshold tank party member needs to use Pneuma as an AOE heal", "坦克队员需要使用魂灵风息进行 AOE 治疗的 HP 阈值" },
+            { "Health threshold tank party member needs to use Zoe", "坦克队员需要使用活化的 HP 阈值" },
             { "Health threshold tank party member needs to use an OGCD Heal on Tanks while not holding addersgal stacks", "没有蛇胆充能时，坦克队员需要 OGCD 治疗的 HP 阈值" },
-            { "Health threshold target needs to be to use Druochole", "目标需要使用灵橡胆汁的 HP 阈值" },
-            { "Health threshold target needs to be to use Taurochole", "目标需要使用灵牛胆汁的 HP 阈值" },
+            { "Health threshold target needs to be to use Druochole", "目标需要使用灵橡清汁的 HP 阈值" },
+            { "Health threshold target needs to be to use Taurochole", "目标需要使用白牛清汁的 HP 阈值" },
             { "Hold hammer chain for movement time (0/5/10/15s).", "为移动保留锤子连击时间（0/5/10/15 秒）" },
             { "Hold melee combo up to 2s if out of range", "超出范围时保留近战连击最多 2 秒" },
             { "Hold one charge of Uncoiled Fury after burst for movement", "爆发后保留一层蛇尾术用于移动" },
@@ -234,11 +202,11 @@ namespace RotationSolver.Basic.Configuration.RotationConfig
             { "Player HP percent needed to use Occult Resuscitation", "使用神秘苏生所需的自身 HP 百分比" },
             { "Player HP percent needed to use Rathalos MegaPotion", "使用雄火龙大药水所需的自身 HP 百分比" },
             { "Player health threshold needed for Bloodbath use", "使用浴血所需的自身 HP 阈值" },
-            { "Please note that this rotation is optimised for Lv100 high-end encounters. V&C/OC GCDs may break combo.\\n", "请注意：此循环针对 100 级高难内容优化。多变/正统迷宫 GCD 可能断开连击。\\n" },
-            { "Please note that this rotation is optimised for combats that start with a countdown Rainbow Drip cast.\\n", "请注意：此循环针对倒计时彩虹点滴起手的战斗优化。\\n" },
-            { "Please note that this rotation is optimised for high-end encounters (Only for countdown 8 people fights).\\n", "请注意：此循环针对高难内容优化（仅适用于 8 人倒计时战斗）。\\n" },
-            { "Please note that this rotation is optimised for high-end encounters.\\n", "请注意：此循环针对高难内容优化。\\n" },
-            { "Please note that this rotation is optimised for most fights. However, V&C/OC GCDs may break mudra.\\n", "请注意：此循环针对大多数战斗优化。但多变/正统迷宫 GCD 可能断开忍术。\\n" },
+            { "Please note that this rotation is optimised for Lv100 high-end encounters. V&C/OC GCDs may break combo.\n", "请注意：此循环针对 100 级高难内容优化。多变/正统迷宫 GCD 可能断开连击。\n" },
+            { "Please note that this rotation is optimised for combats that start with a countdown Rainbow Drip cast.\n", "请注意：此循环针对倒计时彩虹点滴起手的战斗优化。\n" },
+            { "Please note that this rotation is optimised for high-end encounters (Only for countdown 8 people fights).\n", "请注意：此循环针对高难内容优化（仅适用于 8 人倒计时战斗）。\n" },
+            { "Please note that this rotation is optimised for high-end encounters.\n", "请注意：此循环针对高难内容优化。\n" },
+            { "Please note that this rotation is optimised for most fights. However, V&C/OC GCDs may break mudra.\n", "请注意：此循环针对大多数战斗优化。但多变/正统迷宫 GCD 可能断开忍术。\n" },
             { "Pool Black and White Mana for burst Embolden", "为鼓励爆发积攒黑白魔力" },
             { "Pool Shroud for Arcane Circle.", "为神秘环保留魂衣" },
             { "Potion Usage Preset", "爆发药使用预设" },
@@ -328,14 +296,14 @@ namespace RotationSolver.Basic.Configuration.RotationConfig
             { "Use Hagakure or Midare/Tendo Setsugekka when going from single target to AOE scenarios", "从单体切换到 AOE 场景时使用叶隐或纷乱雪月花/天道雪月花" },
             { "Use Hallowed Ground with Cover", "使用神圣领域+掩护" },
             { "Use Hide", "使用隐遁" },
-            { "Use Holos as a heal when applicable", "适用时将全体用作治疗" },
+            { "Use Holos as a heal when applicable", "适用时将整体论用作治疗" },
             { "Use Holy Spirit when out of melee range", "远离近战范围时使用圣灵" },
             { "Use HolyInWhite or CometInBlack while moving", "移动时使用白神圣/黑彗星" },
             { "Use Howling Fist/Enlightenment as a ranged attack verses single target enemies", "将空鸣拳/斗气斩作为远程攻击用于单体敌人" },
             { "Use Inner Release while moving", "移动中使用原初的解放" },
             { "Use Intervention on CoTank during tankbusters", "死刑时对副坦使用干预" },
             { "Use Invulnerability for Starfall", "使用无敌应对陨石冲击" },
-            { "Use Kerachole as a heal when applicable", "适用时将灵角胆汁用作治疗" },
+            { "Use Kerachole as a heal when applicable", "适用时将坚角清汁用作治疗" },
             { "Use Leylines in combat when standing still", "战斗中静止时使用黑魔纹" },
             { "Use Lightspeed for movement (Still reserve for burst)", "移动时使用光速（仍保留爆发）" },
             { "Use Lily at max stacks/about to overcap.", "百合即将溢出时使用安慰之心" },
@@ -361,7 +329,7 @@ namespace RotationSolver.Basic.Configuration.RotationConfig
             { "Use Recitation during the countdown opener", "倒计时起手中使用复诵" },
             { "Use Recitation with Succor, Concitation, or Accession", "将复诵用于士气高扬之策、激励之策或异界的波动" },
             { "Use Retrace when out of Leylines in combat and standing still", "战斗中静止且离开黑魔纹时使用魔罩" },
-            { "Use Rhizomata when out of combat", "脱战时使用根脉" },
+            { "Use Rhizomata when out of combat", "脱战时使用根素" },
             { "Use Riddle of Fire after this ability", "在此技能后使用红莲体势" },
             { "Use Sacred Soil's regeneration as a healing effect", "将野战治疗阵的再生作为治疗效果使用" },
             { "Use Shadowstride in countdown", "倒计时中使用暗影步" },
@@ -389,7 +357,7 @@ namespace RotationSolver.Basic.Configuration.RotationConfig
             { "Use Variant Rampart on cooldown", "好了就用特殊要塞" },
             { "Use Vercure for Dualcast when out of combat.", "脱战时用赤治疗激活连续咏唱" },
             { "Use Warden's Paean on other players", "对其他玩家使用时神的加护" },
-            { "Use Zoe during the countdown opener", "倒计时起手中使用活力" },
+            { "Use Zoe during the countdown opener", "倒计时起手中使用活化" },
             { "Use a stack of Onslaught when its about to overcap while standing still", "静止时猛攻即将溢出则使用一层" },
             { "Use all Energy Drain During Burst", "爆发期间使用全部能量吸收" },
             { "Use both stacks of Leylines automatically", "自动使用两层黑魔纹" },
@@ -427,15 +395,50 @@ namespace RotationSolver.Basic.Configuration.RotationConfig
         /// </summary>
         public static string TryGetChinese(string englishName)
         {
-            if (!IsChineseClient())
+            if (!Service.IsChineseClient)
             {
                 return englishName;
             }
 
-            if (_translations.TryGetValue(englishName, out var chinese))
+            var normalized = englishName.Replace("\r\n", "\n");
+            if (_translations.TryGetValue(normalized, out var chinese))
             {
                 return chinese;
             }
+
+            string? longestPrefix = null;
+            string? longestTranslation = null;
+            var consumedLength = 0;
+            foreach (var translation in _translations)
+            {
+                if (!translation.Key.EndsWith('\n') ||
+                    longestPrefix != null && translation.Key.Length <= longestPrefix.Length)
+                {
+                    continue;
+                }
+
+                if (englishName.StartsWith(translation.Key, StringComparison.Ordinal))
+                {
+                    longestPrefix = translation.Key;
+                    longestTranslation = translation.Value;
+                    consumedLength = translation.Key.Length;
+                    continue;
+                }
+
+                var crlfPrefix = translation.Key.Replace("\n", "\r\n");
+                if (englishName.StartsWith(crlfPrefix, StringComparison.Ordinal))
+                {
+                    longestPrefix = translation.Key;
+                    longestTranslation = translation.Value;
+                    consumedLength = crlfPrefix.Length;
+                }
+            }
+
+            if (longestTranslation != null)
+            {
+                return longestTranslation + englishName[consumedLength..];
+            }
+
             return englishName;
         }
     }

@@ -1,4 +1,4 @@
-﻿using RotationSolver.UI;
+using RotationSolver.UI;
 using System.ComponentModel;
 
 namespace RotationSolver.Data
@@ -731,13 +731,6 @@ namespace RotationSolver.Data
 				{
 					return uiString.GetChineseString();
 				}
-
-				if (_enumDescriptions.TryGetValue(value, out var cachedDesc))
-				{
-					return cachedDesc;
-				}
-
-				return value.ToString();
 			}
 
 			// Handle RotationConfigWindowTab descriptions for Chinese client
@@ -745,7 +738,7 @@ namespace RotationSolver.Data
 			{
 				if (_enumDescriptions.TryGetValue(value, out var desc))
 				{
-					return LocalizationHelper.GetTabDescriptionCN(desc);
+					return LocalizationHelper.GetTabDescriptionCN((RotationConfigWindowTab)value);
 				}
 
 				var field = value.GetType().GetField(value.ToString());
@@ -754,7 +747,7 @@ namespace RotationSolver.Data
 					var attribute = field.GetCustomAttribute<DescriptionAttribute>();
 					var descString = attribute == null ? value.ToString() : attribute.Description;
 					_enumDescriptions.Add(value, descString);
-					return LocalizationHelper.GetTabDescriptionCN(descString);
+					return LocalizationHelper.GetTabDescriptionCN((RotationConfigWindowTab)value);
 				}
 
 				return value.ToString();
@@ -765,7 +758,11 @@ namespace RotationSolver.Data
 				return standardDesc;
 			}
 
-			return value.ToString();
+			var standardField = value.GetType().GetField(value.ToString());
+			var standardAttribute = standardField?.GetCustomAttribute<DescriptionAttribute>();
+			standardDesc = standardAttribute?.Description ?? value.ToString();
+			_enumDescriptions.Add(value, standardDesc);
+			return standardDesc;
 		}
 	}
 }
