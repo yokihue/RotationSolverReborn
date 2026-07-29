@@ -1624,7 +1624,7 @@ public partial class RotationConfigWindow : Window
 							config.Value = val.ToString();
 						}
 					}
-					ImguiTooltips.HoveredTooltip(f.UnitType.GetDescription());
+					ImguiTooltips.HoveredTooltip(f.UnitType.GetLocalizedDescription());
 					ImGuiHelper.ReactPopup(key, command, Reset);
 				}
 			}
@@ -2024,22 +2024,22 @@ public partial class RotationConfigWindow : Window
 	{
 		if (type.HasFlag(CompatibleType.Skill_Usage))
 		{
-			ImGui.TextColored(ImGuiColors.DalamudYellow, CompatibleType.Skill_Usage.GetDescription().Replace('_', ' '));
+			ImGui.TextColored(ImGuiColors.DalamudYellow, CompatibleType.Skill_Usage.GetLocalizedDescription().Replace('_', ' '));
 			ImguiTooltips.HoveredTooltip(UiString.ConfigWindow_About_Compatibility_Mistake.GetDescription());
 		}
 		if (type.HasFlag(CompatibleType.Skill_Selection))
 		{
-			ImGui.TextColored(ImGuiColors.DalamudOrange, CompatibleType.Skill_Selection.GetDescription().Replace('_', ' '));
+			ImGui.TextColored(ImGuiColors.DalamudOrange, CompatibleType.Skill_Selection.GetLocalizedDescription().Replace('_', ' '));
 			ImguiTooltips.HoveredTooltip(UiString.ConfigWindow_About_Compatibility_Mislead.GetDescription());
 		}
 		if (type.HasFlag(CompatibleType.Crash))
 		{
-			ImGui.TextColored(ImGuiColors.DalamudRed, CompatibleType.Crash.GetDescription().Replace('_', ' '));
+			ImGui.TextColored(ImGuiColors.DalamudRed, CompatibleType.Crash.GetLocalizedDescription().Replace('_', ' '));
 			ImguiTooltips.HoveredTooltip(UiString.ConfigWindow_About_Compatibility_Crash.GetDescription());
 		}
 		if (type.HasFlag(CompatibleType.Broken))
 		{
-			ImGui.TextColored(ImGuiColors.DalamudViolet, CompatibleType.Broken.GetDescription().Replace('_', ' '));
+			ImGui.TextColored(ImGuiColors.DalamudViolet, CompatibleType.Broken.GetLocalizedDescription().Replace('_', ' '));
 			ImguiTooltips.HoveredTooltip(UiString.ConfigWindow_About_Compatibility_Crash.GetDescription());
 		}
 	}
@@ -2637,7 +2637,7 @@ public partial class RotationConfigWindow : Window
 							config.Value = val.ToString();
 						}
 					}
-					ImguiTooltips.HoveredTooltip(f.UnitType.GetDescription());
+					ImguiTooltips.HoveredTooltip(f.UnitType.GetLocalizedDescription());
 					ImGuiHelper.ReactPopup(key, command, Reset);
 				}
 			}
@@ -3146,7 +3146,7 @@ public partial class RotationConfigWindow : Window
 				{
 					config.TimeToKill = ttk;
 				}
-				ImguiTooltips.HoveredTooltip(ConfigUnitType.Seconds.GetDescription());
+				ImguiTooltips.HoveredTooltip(ConfigUnitType.Seconds.GetLocalizedDescription());
 
 				if (a.Setting.StatusProvide != null || a.Setting.TargetStatusProvide != null)
 				{
@@ -3186,7 +3186,7 @@ public partial class RotationConfigWindow : Window
 				{
 					config.AutoHealRatio = ratio;
 				}
-				ImguiTooltips.HoveredTooltip(ConfigUnitType.Percent.GetDescription());
+				ImguiTooltips.HoveredTooltip(ConfigUnitType.Percent.GetLocalizedDescription());
 
 			}
 		}

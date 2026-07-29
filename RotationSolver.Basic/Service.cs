@@ -25,8 +25,7 @@ internal class Service : IDisposable
 	public const string OFFCOMMAND = "/rotation Off";
 	public const string USERNAME = "FFXIV-CombatReborn";
 	public const string REPO = "RotationSolverReborn";
-	private static readonly Lazy<bool> IsChineseClientCache = new(DetectChineseClient);
-	internal static bool IsChineseClient => IsChineseClientCache.Value;
+	internal static bool IsChineseClient => DetectChineseClient();
 
 	private static bool DetectChineseClient()
 	{

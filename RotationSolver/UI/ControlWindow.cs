@@ -232,7 +232,7 @@ internal class ControlWindow : CtrlWindow
 			ImGui.SetCursorPosX(ImGui.GetCursorPosX() + Math.Max(2, (width / 2) - (strWidth / 2)));
 			ImGui.TextColored(color, str);
 
-			var help = command.GetDescription();
+			var help = command.GetLocalizedDescription();
 			if (ability != null)
 			{
 				help = help + "\n" + $"({ability.Name})";
@@ -328,7 +328,7 @@ internal class ControlWindow : CtrlWindow
 			ImGui.SetCursorPosX(ImGui.GetCursorPosX() + Math.Max(0, (width / 2) - (strWidth / 2)));
 			ImGui.TextColored(color, str);
 
-			var help = command.GetDescription();
+			var help = command.GetLocalizedDescription();
 			if (!string.IsNullOrEmpty(helpAddition))
 			{
 				help += "\n" + helpAddition;
@@ -372,7 +372,7 @@ internal class ControlWindow : CtrlWindow
 			ImGui.SetCursorPosX(ImGui.GetCursorPosX() + Math.Max(0, (width / 2) - (strWidth / 2)) - 3.5f);
 			ImGui.TextColored(color, str);
 
-			var help = command.GetDescription();
+			var help = command.GetLocalizedDescription();
 			var baseId = "ImgButton" + command.ToString();
 
 			if (IconSet.GetTexture(iconId, out var texture) && texture?.Handle != null)

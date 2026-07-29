@@ -680,15 +680,9 @@ namespace RotationSolver.Data
 		{
 			if (_enumDescriptions.TryGetValue(value, out var description))
 			{
-				// Re-check UiString values in case language has changed since first cache
 				if (value is UiString)
 				{
 					return value.GetLocalizedDescription();
-				}
-				// Translate other enum descriptions for Chinese clients
-				if (LocalizationHelper.IsChineseClient)
-				{
-					return LocalizationHelper.GetGeneralChinese(description);
 				}
 				return description;
 			}
@@ -705,16 +699,9 @@ namespace RotationSolver.Data
 			var descString = attribute == null ? value.ToString() : attribute.Description;
 			_enumDescriptions.Add(value, descString);
 
-			// For UiString values, return the localized version
 			if (value is UiString)
 			{
 				return value.GetLocalizedDescription();
-			}
-
-			// Translate other enum descriptions for Chinese clients
-			if (LocalizationHelper.IsChineseClient)
-			{
-				return LocalizationHelper.GetGeneralChinese(descString);
 			}
 
 			return descString;
@@ -753,16 +740,17 @@ namespace RotationSolver.Data
 				return value.ToString();
 			}
 
-			if (_enumDescriptions.TryGetValue(value, out var standardDesc))
+			if (!_enumDescriptions.TryGetValue(value, out var standardDesc))
 			{
-				return standardDesc;
+				var standardField = value.GetType().GetField(value.ToString());
+				var standardAttribute = standardField?.GetCustomAttribute<DescriptionAttribute>();
+				standardDesc = standardAttribute?.Description ?? value.ToString();
+				_enumDescriptions.Add(value, standardDesc);
 			}
 
-			var standardField = value.GetType().GetField(value.ToString());
-			var standardAttribute = standardField?.GetCustomAttribute<DescriptionAttribute>();
-			standardDesc = standardAttribute?.Description ?? value.ToString();
-			_enumDescriptions.Add(value, standardDesc);
-			return standardDesc;
+			return LocalizationHelper.IsChineseClient
+				? LocalizationHelper.GetGeneralChinese(standardDesc)
+				: standardDesc;
 		}
 	}
 }

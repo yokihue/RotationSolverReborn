@@ -271,14 +271,6 @@ namespace RotationSolver.Data
         }
 
         /// <summary>
-        /// Gets the localized string based on whether the client is running in Chinese.
-        /// </summary>
-        public static string GetLocalizedString(this UiString value, bool isChineseClient)
-        {
-            return isChineseClient ? value.GetChineseString() : value.GetDescription();
-        }
-
-        /// <summary>
         /// Gets the Chinese (Simplified) translation for a RotationConfigWindowTab description.
         /// </summary>
         public static string GetTabDescriptionCN(RotationConfigWindowTab tab)
