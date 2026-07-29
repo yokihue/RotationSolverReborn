@@ -362,9 +362,9 @@ namespace RotationSolver.Data
             { "Ratio Unit, as percentage.", "比例单位（百分比）" },
             { "Display Unit, in pixels.", "显示单位（像素）" },
 
-            // CompatibleType (no Description attrs, .ToString() used with .Replace('_', ' '))
-            { "Skill Usage", "技能使用" },
-            { "Skill Selection", "技能选择" },
+            // CompatibleType (no Description attrs; .ToString() gives underscored keys like "Skill_Usage")
+            { "Skill_Usage", "技能使用" },
+            { "Skill_Selection", "技能选择" },
             { "Crash", "崩溃" },
             { "Broken", "损坏" },
         };
